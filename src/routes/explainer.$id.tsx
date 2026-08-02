@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, Loader2, ListChecks } from "lucide-react";
+import { AlertTriangle, Loader2, ListChecks, PlayCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { StepPlayer } from "@/components/explainer/StepPlayer";
+import { CinematicPlayer } from "@/components/explainer/CinematicPlayer";
 import { ConceptMap } from "@/components/explainer/ConceptMap";
 import { PracticeSet } from "@/components/explainer/PracticeSet";
 import { DocumentChat } from "@/components/explainer/DocumentChat";
@@ -46,6 +49,7 @@ export const Route = createFileRoute("/explainer/$id")({
 
 function ExplainerPage() {
   const { id } = Route.useParams();
+  const [cinema, setCinema] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["explainer", id],
     queryFn: async () => {
@@ -85,7 +89,22 @@ function ExplainerPage() {
         </Badge>
         <h1 className="mt-3 text-3xl font-semibold">{data.title}</h1>
         <p className="mt-2 max-w-3xl text-muted-foreground">{data.summary}</p>
+        {steps.length > 0 && (
+          <Button className="mt-5" size="lg" onClick={() => setCinema(true)}>
+            <PlayCircle className="size-4" />
+            Watch as video
+          </Button>
+        )}
       </header>
+
+      {cinema && (
+        <CinematicPlayer
+          title={String(data.title)}
+          steps={steps}
+          templateType={String(data.template_type ?? "process_flow")}
+          onClose={() => setCinema(false)}
+        />
+      )}
 
       <StepPlayer steps={steps} templateType={String(data.template_type ?? "process_flow")} />
 
