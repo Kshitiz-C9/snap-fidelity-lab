@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as UploadRouteImport } from './routes/upload'
+import { Route as ExplainerIdRouteImport } from './routes/explainer.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const UploadRoute = UploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExplainerIdRoute = ExplainerIdRouteImport.update({
+  id: '/explainer/$id',
+  path: '/explainer/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/library': typeof LibraryRoute
   '/upload': typeof UploadRoute
+  '/explainer/$id': typeof ExplainerIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/library': typeof LibraryRoute
   '/upload': typeof UploadRoute
+  '/explainer/$id': typeof ExplainerIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/library': typeof LibraryRoute
   '/upload': typeof UploadRoute
+  '/explainer/$id': typeof ExplainerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/library' | '/upload'
+  fullPaths: '/' | '/auth' | '/library' | '/upload' | '/explainer/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/library' | '/upload'
-  id: '__root__' | '/' | '/auth' | '/library' | '/upload'
+  to: '/' | '/auth' | '/library' | '/upload' | '/explainer/$id'
+  id: '__root__' | '/' | '/auth' | '/library' | '/upload' | '/explainer/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   LibraryRoute: typeof LibraryRoute
   UploadRoute: typeof UploadRoute
+  ExplainerIdRoute: typeof ExplainerIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explainer/$id': {
+      id: '/explainer/$id'
+      path: '/explainer/$id'
+      fullPath: '/explainer/$id'
+      preLoaderRoute: typeof ExplainerIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   LibraryRoute: LibraryRoute,
   UploadRoute: UploadRoute,
+  ExplainerIdRoute: ExplainerIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
