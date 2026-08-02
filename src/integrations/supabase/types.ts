@@ -14,7 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      documents: {
+        Row: {
+          char_count: number
+          content: string
+          created_at: string
+          domain: string | null
+          id: string
+          source_type: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          char_count?: number
+          content: string
+          created_at?: string
+          domain?: string | null
+          id?: string
+          source_type?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          char_count?: number
+          content?: string
+          created_at?: string
+          domain?: string | null
+          id?: string
+          source_type?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      explainers: {
+        Row: {
+          concepts: Json
+          created_at: string
+          document_id: string
+          id: string
+          prerequisites: Json
+          questions: Json
+          relations: Json
+          revision_flags: Json
+          status: string
+          steps: Json
+          summary: string | null
+          template_type: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          concepts?: Json
+          created_at?: string
+          document_id: string
+          id?: string
+          prerequisites?: Json
+          questions?: Json
+          relations?: Json
+          revision_flags?: Json
+          status?: string
+          steps?: Json
+          summary?: string | null
+          template_type?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          concepts?: Json
+          created_at?: string
+          document_id?: string
+          id?: string
+          prerequisites?: Json
+          questions?: Json
+          relations?: Json
+          revision_flags?: Json
+          status?: string
+          steps?: Json
+          summary?: string | null
+          template_type?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "explainers_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
