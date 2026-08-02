@@ -37,7 +37,7 @@ export function TopicVisual({ templateType, steps, index, onSelect }: Props) {
 type LayoutProps = {
   steps: ExplainerStep[];
   index: number;
-  onSelect?: (index: number) => void;
+  onSelect: ((index: number) => void) | undefined;
 };
 
 function hitProps(
