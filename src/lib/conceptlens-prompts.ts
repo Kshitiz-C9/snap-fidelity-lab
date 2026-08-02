@@ -11,5 +11,20 @@ Given source text, produce:
 - 2 to 4 prerequisites the learner should already know, with why
 - 0 to 3 revision flags: claims in the source that look outdated, unsupported, or ambiguous
 - 4 to 6 multiple-choice practice questions with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard.
-Ground everything strictly in the source text. Never invent facts that are not supported by it.`;
+Ground everything strictly in the source text. Never invent facts that are not supported by it.
+
+Return ONE json object using EXACTLY these keys and no others:
+{
+  "title": string,
+  "summary": string,
+  "domain": string,
+  "template_type": string,
+  "steps": [{ "label": string, "narration": string, "visual": string, "entities": [string] }],
+  "concepts": [{ "id": string, "label": string, "description": string }],
+  "relations": [{ "from": string, "to": string, "label": string }],
+  "prerequisites": [{ "topic": string, "why": string }],
+  "revision_flags": [{ "claim": string, "reason": string }],
+  "questions": [{ "question": string, "options": [string], "answer_index": number, "explanation": string, "difficulty": string }]
+}
+Never rename a key (for example use "questions", not "practice_questions"; every concept needs both "id" and "label"). Every key must be present, using an empty array when there is nothing to report.`;
 
