@@ -42,18 +42,22 @@ function AuthPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    const fn =
+    const { data, error } =
       mode === "signin"
-        ? supabase.auth.signInWithPassword({ email, password })
-        : supabase.auth.signUp({
+        ? await supabase.auth.signInWithPassword({ email, password })
+        : await supabase.auth.signUp({
             email,
             password,
             options: { emailRedirectTo: `${window.location.origin}/library` },
           });
-    const { error } = await fn;
     setBusy(false);
     if (error) {
       toast.error(error.message);
+      return;
+    }
+    if (!data.session) {
+      toast.success("Check your inbox to confirm your email, then sign in.");
+      setMode("signin");
       return;
     }
     toast.success(mode === "signin" ? "Welcome back" : "Account created");
