@@ -4,12 +4,13 @@ type Props = {
   templateType: string;
   steps: ExplainerStep[];
   index: number;
+  onSelect?: (index: number) => void;
 };
 
 const W = 720;
 const H = 260;
 
-export function TopicVisual({ templateType, steps, index }: Props) {
+export function TopicVisual({ templateType, steps, index, onSelect }: Props) {
   if (!steps.length) return null;
   const type = (templateType || "process_flow").toLowerCase();
 
@@ -21,16 +22,45 @@ export function TopicVisual({ templateType, steps, index }: Props) {
       aria-label={`Diagram of step ${index + 1}: ${steps[index]?.label ?? ""}`}
     >
       {type === "grid" ? (
-        <Grid steps={steps} index={index} />
+        <Grid steps={steps} index={index} onSelect={onSelect} />
       ) : type === "graph_tree" ? (
-        <Tree steps={steps} index={index} />
+        <Tree steps={steps} index={index} onSelect={onSelect} />
       ) : type === "state_transition" ? (
-        <States steps={steps} index={index} />
+        <States steps={steps} index={index} onSelect={onSelect} />
       ) : (
-        <Flow steps={steps} index={index} />
+        <Flow steps={steps} index={index} onSelect={onSelect} />
       )}
     </svg>
   );
+}
+
+type LayoutProps = {
+  steps: ExplainerStep[];
+  index: number;
+  onSelect?: (index: number) => void;
+};
+
+function hitProps(
+  onSelect: ((i: number) => void) | undefined,
+  i: number,
+  label: string,
+  active: boolean,
+) {
+  if (!onSelect) return {};
+  return {
+    role: "button" as const,
+    tabIndex: 0,
+    "aria-label": `Jump to step ${i + 1}: ${label}`,
+    "aria-current": active ? ("step" as const) : undefined,
+    className: "cursor-pointer outline-none focus-visible:opacity-100",
+    onClick: () => onSelect(i),
+    onKeyDown: (e: React.KeyboardEvent<SVGGElement>) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onSelect(i);
+      }
+    },
+  };
 }
 
 function clip(text: string, max = 16) {
@@ -47,7 +77,7 @@ function stateOf(i: number, index: number) {
   return i === index ? "active" : i < index ? "done" : "todo";
 }
 
-function Flow({ steps, index }: { steps: ExplainerStep[]; index: number }) {
+function Flow({ steps, index, onSelect }: LayoutProps) {
   const gap = W / steps.length;
   const y = H / 2;
   return (
@@ -57,7 +87,7 @@ function Flow({ steps, index }: { steps: ExplainerStep[]; index: number }) {
         const st = stateOf(i, index) as "done" | "active" | "todo";
         const c = nodeClasses(st);
         return (
-          <g key={i} opacity={c.op}>
+          <g key={i} opacity={c.op} {...hitProps(onSelect, i, s.label, st === "active")}>
             {i < steps.length - 1 && (
               <line
                 x1={x + 26}
@@ -94,6 +124,13 @@ function Flow({ steps, index }: { steps: ExplainerStep[]; index: number }) {
             >
               {clip(s.label, 14)}
             </text>
+            <rect
+              x={x - gap / 2}
+              y={y - 40}
+              width={gap}
+              height={100}
+              fill="transparent"
+            />
           </g>
         );
       })}
@@ -101,7 +138,7 @@ function Flow({ steps, index }: { steps: ExplainerStep[]; index: number }) {
   );
 }
 
-function States({ steps, index }: { steps: ExplainerStep[]; index: number }) {
+function States({ steps, index, onSelect }: LayoutProps) {
   const cx = W / 2;
   const cy = H / 2;
   const r = Math.min(W, H) / 2 - 40;
@@ -130,7 +167,7 @@ function States({ steps, index }: { steps: ExplainerStep[]; index: number }) {
         const st = stateOf(i, index) as "done" | "active" | "todo";
         const c = nodeClasses(st);
         return (
-          <g key={i} opacity={c.op}>
+          <g key={i} opacity={c.op} {...hitProps(onSelect, i, steps[i]!.label, st === "active")}>
             <circle cx={p.x} cy={p.y} r={st === "active" ? 18 : 13} className={c.fill} />
             <text
               x={p.x}
@@ -141,6 +178,7 @@ function States({ steps, index }: { steps: ExplainerStep[]; index: number }) {
             >
               {clip(steps[i]!.label, 14)}
             </text>
+            <circle cx={p.x} cy={p.y} r={26} fill="transparent" />
           </g>
         );
       })}
@@ -148,7 +186,7 @@ function States({ steps, index }: { steps: ExplainerStep[]; index: number }) {
   );
 }
 
-function Grid({ steps, index }: { steps: ExplainerStep[]; index: number }) {
+function Grid({ steps, index, onSelect }: LayoutProps) {
   const cols = Math.ceil(Math.sqrt(steps.length));
   const rows = Math.ceil(steps.length / cols);
   const cw = W / cols;
@@ -161,7 +199,7 @@ function Grid({ steps, index }: { steps: ExplainerStep[]; index: number }) {
         const st = stateOf(i, index) as "done" | "active" | "todo";
         const c = nodeClasses(st);
         return (
-          <g key={i} opacity={c.op}>
+          <g key={i} opacity={c.op} {...hitProps(onSelect, i, s.label, st === "active")}>
             <rect
               x={col * cw + 8}
               y={row * ch + 8}
@@ -186,7 +224,7 @@ function Grid({ steps, index }: { steps: ExplainerStep[]; index: number }) {
   );
 }
 
-function Tree({ steps, index }: { steps: ExplainerStep[]; index: number }) {
+function Tree({ steps, index, onSelect }: LayoutProps) {
   const root = { x: W / 2, y: 40 };
   const children = steps.slice(1);
   const gap = W / Math.max(children.length, 1);
@@ -200,7 +238,7 @@ function Tree({ steps, index }: { steps: ExplainerStep[]; index: number }) {
         const st = stateOf(i + 1, index) as "done" | "active" | "todo";
         const c = nodeClasses(st);
         return (
-          <g key={i} opacity={c.op}>
+          <g key={i} opacity={c.op} {...hitProps(onSelect, i + 1, s.label, st === "active")}>
             <path
               d={`M ${root.x} ${root.y + 16} C ${root.x} ${(root.y + y) / 2}, ${x} ${(root.y + y) / 2}, ${x} ${y - 14}`}
               fill="none"
@@ -217,10 +255,11 @@ function Tree({ steps, index }: { steps: ExplainerStep[]; index: number }) {
             >
               {clip(s.label, 14)}
             </text>
+            <circle cx={x} cy={y} r={26} fill="transparent" />
           </g>
         );
       })}
-      <g opacity={rc.op}>
+      <g opacity={rc.op} {...hitProps(onSelect, 0, steps[0]!.label, rootState === "active")}>
         <circle cx={root.x} cy={root.y} r={rootState === "active" ? 18 : 14} className={rc.fill} />
         <text
           x={root.x}
@@ -231,6 +270,7 @@ function Tree({ steps, index }: { steps: ExplainerStep[]; index: number }) {
         >
           {clip(steps[0]!.label, 18)}
         </text>
+        <circle cx={root.x} cy={root.y} r={28} fill="transparent" />
       </g>
     </g>
   );
