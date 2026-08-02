@@ -35,7 +35,15 @@ export function StepPlayer({
     <div className="panel overflow-hidden">
       <div className="hero-surface relative min-h-[320px] p-8">
         <div key={`visualdiagram-${index}`} className="animate-in fade-in mb-6">
-          <TopicVisual templateType={templateType} steps={steps} index={index} />
+          <TopicVisual
+            templateType={templateType}
+            steps={steps}
+            index={index}
+            onSelect={(i) => {
+              setPlaying(false);
+              setIndex(i);
+            }}
+          />
         </div>
         <div className="flex flex-wrap gap-2">
           {step.entities.map((entity, i) => (
