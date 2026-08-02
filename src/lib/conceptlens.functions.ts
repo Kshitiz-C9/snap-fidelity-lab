@@ -58,6 +58,7 @@ export const generateExplainer = createServerFn({ method: "POST" })
         model: gateway(MODEL),
         output: Output.object({ schema: explainerSchema }),
         system: SYSTEM_PROMPT,
+        maxOutputTokens: 16000,
         prompt: `Document title: ${doc.title}\n\nSource text:\n${source}`,
       });
       payload = output;
