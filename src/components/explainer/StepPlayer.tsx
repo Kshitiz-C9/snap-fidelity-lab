@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExplainerStep } from "@/lib/explainer-schema";
+import { TopicVisual } from "./TopicVisual";
 
-export function StepPlayer({ steps }: { steps: ExplainerStep[] }) {
+export function StepPlayer({
+  steps,
+  templateType = "process_flow",
+}: {
+  steps: ExplainerStep[];
+  templateType?: string;
+}) {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
 
@@ -27,6 +34,9 @@ export function StepPlayer({ steps }: { steps: ExplainerStep[] }) {
   return (
     <div className="panel overflow-hidden">
       <div className="hero-surface relative min-h-[320px] p-8">
+        <div key={`visualdiagram-${index}`} className="animate-in fade-in mb-6">
+          <TopicVisual templateType={templateType} steps={steps} index={index} />
+        </div>
         <div className="flex flex-wrap gap-2">
           {step.entities.map((entity, i) => (
             <span

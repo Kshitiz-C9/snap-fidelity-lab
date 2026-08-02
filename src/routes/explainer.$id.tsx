@@ -87,7 +87,7 @@ function ExplainerPage() {
         <p className="mt-2 max-w-3xl text-muted-foreground">{data.summary}</p>
       </header>
 
-      <StepPlayer steps={steps} />
+      <StepPlayer steps={steps} templateType={String(data.template_type ?? "process_flow")} />
 
       <Tabs defaultValue="map">
         <TabsList>
