@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExplainerStep } from "@/lib/explainer-schema";
@@ -13,6 +13,18 @@ export function StepPlayer({
 }) {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  function goToStep(next: number, scroll = false) {
+    const clamped = Math.max(0, Math.min(steps.length - 1, next));
+    setTransitioning(true);
+    setIndex(clamped);
+    if (scroll) {
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    window.setTimeout(() => setTransitioning(false), 320);
+  }
 
   useEffect(() => {
     if (!playing) return;
@@ -32,8 +44,12 @@ export function StepPlayer({
   if (!step) return null;
 
   return (
-    <div className="panel overflow-hidden">
-      <div className="hero-surface relative min-h-[320px] p-8">
+    <div ref={containerRef} className="panel scroll-mt-24 overflow-hidden">
+      <div
+        className={`hero-surface relative min-h-[320px] p-8 transition-all duration-300 ease-out ${
+          transitioning ? "scale-[0.99] opacity-70 blur-[1px]" : "scale-100 opacity-100 blur-0"
+        }`}
+      >
         <div key={`visualdiagram-${index}`} className="animate-in fade-in mb-6">
           <TopicVisual
             templateType={templateType}
@@ -41,7 +57,7 @@ export function StepPlayer({
             index={index}
             onSelect={(i) => {
               setPlaying(false);
-              setIndex(i);
+              goToStep(i, true);
             }}
           />
         </div>
@@ -78,7 +94,7 @@ export function StepPlayer({
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setIndex((i) => Math.max(0, i - 1))}
+            onClick={() => goToStep(index - 1)}
             aria-label="Previous step"
           >
             <SkipBack className="size-4" />
@@ -93,7 +109,7 @@ export function StepPlayer({
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setIndex((i) => Math.min(steps.length - 1, i + 1))}
+            onClick={() => goToStep(index + 1)}
             aria-label="Next step"
           >
             <SkipForward className="size-4" />
@@ -103,7 +119,7 @@ export function StepPlayer({
               <button
                 key={i}
                 aria-label={`Go to step ${i + 1}: ${s.label}`}
-                onClick={() => setIndex(i)}
+                onClick={() => goToStep(i)}
                 className={`h-1.5 flex-1 rounded-full transition-colors ${
                   i <= index ? "bg-primary" : "bg-secondary"
                 }`}
