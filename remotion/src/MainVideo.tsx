@@ -35,21 +35,16 @@ export const MainVideo: React.FC = () => {
           <TitleScene title={title} summary={summary} />
         </TransitionSeries.Sequence>
 
-        {steps.map((step, i) => (
-          <>
-            <TransitionSeries.Transition
-              key={`t-${i}`}
-              presentation={wipe({ direction: i % 2 === 0 ? "from-right" : "from-bottom" })}
-              timing={timing}
-            />
-            <TransitionSeries.Sequence
-              key={`s-${i}`}
-              durationInFrames={STEP_FRAMES[i] ?? 140}
-            >
-              <StepScene step={step} index={i} total={steps.length} />
-            </TransitionSeries.Sequence>
-          </>
-        ))}
+        {steps.flatMap((step, i) => [
+          <TransitionSeries.Transition
+            key={`t-${i}`}
+            presentation={wipe({ direction: i % 2 === 0 ? "from-right" : "from-bottom" })}
+            timing={timing}
+          />,
+          <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={STEP_FRAMES[i] ?? 140}>
+            <StepScene step={step} index={i} total={steps.length} />
+          </TransitionSeries.Sequence>,
+        ])}
 
         <TransitionSeries.Transition presentation={fade()} timing={timing} />
         <TransitionSeries.Sequence durationInFrames={OUTRO_FRAMES}>
