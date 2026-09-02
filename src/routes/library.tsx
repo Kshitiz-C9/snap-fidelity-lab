@@ -48,7 +48,7 @@ function LibraryPage() {
     <div>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">Library</h1>
+          <h1 className="font-display text-3xl">Library</h1>
           <p className="mt-2 text-muted-foreground">
             Your generated explainers, concept maps and practice sets.
           </p>
@@ -68,7 +68,7 @@ function LibraryPage() {
       ) : !data?.length ? (
         <div className="panel mt-10 p-12 text-center">
           <Film className="mx-auto size-8 text-muted-foreground" />
-          <h2 className="mt-4 text-lg font-semibold">No explainers yet</h2>
+          <h2 className="mt-4 font-display text-xl">No explainers yet</h2>
           <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
             Upload a chapter or paste notes and ConceptLens will build your first
             animated explainer.
@@ -84,17 +84,17 @@ function LibraryPage() {
               key={row.id}
               to="/explainer/$id"
               params={{ id: row.id }}
-              className="panel group p-5 transition-colors hover:border-primary/60"
+              className="panel group p-5 transition-colors hover:border-primary"
             >
               <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="font-mono text-[10px] uppercase">
+                <Badge variant="secondary" className="rounded-[3px] text-[11px] font-normal capitalize">
                   {String(row.template_type).replace(/_/g, " ")}
                 </Badge>
                 <span className="text-xs text-muted-foreground">
                   {(row.steps as unknown[])?.length ?? 0} steps
                 </span>
               </div>
-              <h2 className="mt-3 text-lg font-semibold group-hover:text-primary">
+              <h2 className="mt-3 font-display text-xl">
                 {row.title}
               </h2>
               <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
