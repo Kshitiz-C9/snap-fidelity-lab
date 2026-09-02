@@ -201,38 +201,44 @@ function UploadPage() {
 
       setPhase("uploading");
       setProgress("Uploading document…");
-      const { id } = await draft({
-        data: {
+      const { id } = await withAuthRetry(() =>
+        draft({
+          data: {
           title: docTitle,
           sourceType: "pdf",
           fileName: file.name,
           fileSize: file.size,
-          pageCount: pages.length,
-        },
-      });
+            pageCount: pages.length,
+          },
+        }),
+      );
 
       setPhase("processing");
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i]!;
         setProgress(`Uploading section ${i + 1} of ${chunks.length}…`);
-        await appendChunk({
-          data: {
-            documentId: id,
-            chunkIndex: i,
-            pageStart: chunk.pageStart,
-            pageEnd: chunk.pageEnd,
-            content: chunk.content,
-          },
-        });
+        await withAuthRetry(() =>
+          appendChunk({
+            data: {
+              documentId: id,
+              chunkIndex: i,
+              pageStart: chunk.pageStart,
+              pageEnd: chunk.pageEnd,
+              content: chunk.content,
+            },
+          }),
+        );
       }
 
-      await finalize({
-        data: {
-          documentId: id,
-          charCount,
-          preview: chunks[0]!.content.slice(0, 4000),
-        },
-      });
+      await withAuthRetry(() =>
+        finalize({
+          data: {
+            documentId: id,
+            charCount,
+            preview: chunks[0]!.content.slice(0, 4000),
+          },
+        }),
+      );
 
       setUploaded({
         documentId: id,
