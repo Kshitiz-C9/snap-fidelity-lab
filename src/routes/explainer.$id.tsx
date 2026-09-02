@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { StepPlayer } from "@/components/explainer/StepPlayer";
 import { PracticeSet } from "@/components/explainer/PracticeSet";
-import { StepExercises } from "@/components/explainer/StepExercises";
 import type {
   ExplainerConcept,
   ExplainerFlag,
