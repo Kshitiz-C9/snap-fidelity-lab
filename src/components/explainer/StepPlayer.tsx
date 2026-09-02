@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { useRef, useState } from "react";
+import { SkipBack, SkipForward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExplainerStep } from "@/lib/explainer-schema";
 import { TopicVisual } from "./TopicVisual";
+import { StepStage } from "./StepStage";
 
 export function StepPlayer({
   steps,
@@ -12,7 +13,6 @@ export function StepPlayer({
   templateType?: string;
 }) {
   const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -26,20 +26,6 @@ export function StepPlayer({
     window.setTimeout(() => setTransitioning(false), 320);
   }
 
-  useEffect(() => {
-    if (!playing) return;
-    const t = setTimeout(() => {
-      setIndex((i) => {
-        if (i >= steps.length - 1) {
-          setPlaying(false);
-          return i;
-        }
-        return i + 1;
-      });
-    }, 7000);
-    return () => clearTimeout(t);
-  }, [playing, index, steps.length]);
-
   const step = steps[index];
   if (!step) return null;
 
@@ -47,43 +33,48 @@ export function StepPlayer({
     <div ref={containerRef} className="slab scroll-mt-24 overflow-hidden">
       {/* notebook page: the animation canvas */}
       <div
-        className={`notebook relative min-h-[320px] px-8 py-8 transition-opacity duration-300 ease-out ${
+        className={`notebook relative px-8 py-8 transition-opacity duration-300 ease-out ${
           transitioning ? "opacity-70" : "opacity-100"
         }`}
       >
-        <div className="mb-6">
-          <TopicVisual
-            templateType={templateType}
-            steps={steps}
-            index={index}
-            onSelect={(i) => {
-              setPlaying(false);
-              goToStep(i, true);
-            }}
-          />
+        <TopicVisual
+          templateType={templateType}
+          steps={steps}
+          index={index}
+          onSelect={(i) => goToStep(i, true)}
+        />
+
+        <div className="mt-6 border-t border-border pt-6">
+          <StepStage steps={steps} index={index} />
         </div>
 
-        <div className="h-px w-full bg-border" />
+        <div className="mt-7 border-t border-border pt-6">
+          <h3 className="max-w-3xl text-left font-display text-[2rem] font-bold leading-tight tracking-tight">
+            {step.label}
+          </h3>
+          <p className="mt-2 max-w-2xl text-left font-sans text-sm font-normal text-accent">
+            {step.visual}
+          </p>
 
-        <div className="flex flex-wrap gap-2 pt-6">
-          {step.entities.map((entity, i) => (
-            <span
-              key={`${index}-${entity}-${i}`}
-              className="rounded-[3px] border border-border px-2.5 py-1 text-xs text-foreground/80"
-            >
-              {entity}
-            </span>
-          ))}
+          <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2">
+            {step.entities.map((entity, i) => (
+              <span
+                key={`${index}-${entity}-${i}`}
+                className="rounded-full bg-primary/12 px-2.5 py-1 font-sans text-[11px] font-normal text-foreground/80"
+              >
+                {entity}
+              </span>
+            ))}
+          </div>
         </div>
-
-        <h3 className="mt-6 max-w-3xl text-left font-display text-3xl">{step.label}</h3>
-        <p className="mt-3 max-w-2xl text-left text-sm text-accent">{step.visual}</p>
       </div>
 
       <div className="border-t border-border bg-background px-8 py-6">
-        <p className="max-w-3xl text-left text-base leading-relaxed">{step.narration}</p>
+        <p className="max-w-3xl text-left font-sans text-[0.95rem] font-normal leading-relaxed text-foreground/85">
+          {step.narration}
+        </p>
 
-        <div className="mt-4 h-px w-full bg-border" />
+        <div className="mt-5 h-px w-full bg-border" />
 
         <div className="mt-5 flex items-center gap-3">
           <Button
@@ -94,14 +85,6 @@ export function StepPlayer({
             aria-label="Previous step"
           >
             <SkipBack className="size-4" />
-          </Button>
-          <Button
-            size="icon"
-            className="rounded-[3px]"
-            onClick={() => setPlaying((p) => !p)}
-            aria-label={playing ? "Pause" : "Play"}
-          >
-            {playing ? <Pause className="size-4" /> : <Play className="size-4" />}
           </Button>
           <Button
             variant="outline"
@@ -123,15 +106,15 @@ export function StepPlayer({
                   aria-label={`Go to step ${i + 1}: ${s.label}`}
                   aria-current={i === index ? "step" : undefined}
                   onClick={() => goToStep(i)}
-                  className="group flex size-5 items-center justify-center"
+                  className="group flex size-6 items-center justify-center bg-background"
                 >
                   <span
                     className={`block rounded-full transition-all ${
                       i === index
-                        ? "size-3 bg-primary"
+                        ? "size-3 bg-primary ring-4 ring-primary/25"
                         : i < index
-                          ? "size-2 bg-primary/70"
-                          : "size-2 border border-muted-foreground/60 bg-background group-hover:border-primary"
+                          ? "size-2.5 bg-primary"
+                          : "size-2.5 border border-muted-foreground/50 bg-transparent group-hover:border-primary"
                     }`}
                   />
                 </button>
@@ -139,7 +122,7 @@ export function StepPlayer({
             </div>
           </div>
 
-          <span className="font-sans text-xs text-muted-foreground">
+          <span className="font-sans text-xs font-normal text-muted-foreground">
             Step {index + 1} of {steps.length}
           </span>
         </div>

@@ -136,7 +136,7 @@ function UploadPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="text-3xl font-semibold">New explainer</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight">New explainer</h1>
       <p className="mt-2 text-muted-foreground">
         Paste a chapter, paper or lecture transcript. PDF, plain text and markdown
         files can be dropped in directly.
