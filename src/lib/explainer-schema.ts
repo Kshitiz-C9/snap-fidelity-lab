@@ -10,6 +10,7 @@ export const explainerSchema = z.object({
       label: z.string(),
       narration: z.string(),
       visual: z.string(),
+      example: z.string().optional().default(""),
       entities: z.array(z.string()),
     }),
   ),
