@@ -98,32 +98,38 @@ function Flow({ steps, index, onSelect }: LayoutProps) {
                 strokeWidth={2}
               />
             )}
-            <rect
-              x={x - 26}
-              y={y - 20}
-              width={52}
-              height={40}
-              rx={10}
-              className={c.fill}
-            />
+            {st === "todo" ? (
+              <circle
+                cx={x}
+                cy={y}
+                r={7}
+                fill="none"
+                stroke="var(--color-muted-foreground)"
+                strokeWidth={1.5}
+              />
+            ) : (
+              <circle cx={x} cy={y} r={st === "active" ? 10 : 7} className={c.fill} />
+            )}
             <text
               x={x}
-              y={y + 4}
+              y={y + 34}
               textAnchor="middle"
-              className="fill-background font-semibold"
-              style={{ fontSize: 13 }}
-            >
-              {i + 1}
-            </text>
-            <text
-              x={x}
-              y={y + 44}
-              textAnchor="middle"
-              className="fill-muted-foreground"
-              style={{ fontSize: 10 }}
+              className={st === "active" ? "fill-foreground" : "fill-muted-foreground"}
+              style={{ fontSize: 11 }}
             >
               {clip(s.label, 14)}
             </text>
+            {st === "active" && (
+              <line
+                x1={x - 34}
+                y1={y + 42}
+                x2={x + 34}
+                y2={y + 42}
+                stroke="var(--color-primary)"
+                strokeWidth={2}
+              />
+            )}
+
             <rect
               x={x - gap / 2}
               y={y - 40}
