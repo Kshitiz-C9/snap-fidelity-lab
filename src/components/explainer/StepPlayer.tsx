@@ -50,7 +50,7 @@ export function StepPlayer({
 
         {step.example ? (
           <div className="mt-6 border-l-2 border-primary bg-primary/10 px-4 py-3">
-            <span className="font-sans text-[11px] font-medium uppercase-none text-accent">
+            <span className="font-sans text-[11px] font-medium text-accent">
               Example
             </span>
             <p className="mt-1 max-w-2xl text-left font-mono text-[0.9rem] leading-relaxed text-foreground">
