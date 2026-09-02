@@ -48,15 +48,16 @@ export function StepStage({
       {entities.map((entity, i) => {
         const x = 20 + span * i;
         const isLead = i === 0;
+        const edgeLabel = labelFor(i);
         return (
-          <g key={`${index}-${entity}-${i}`}>
+          <g key={`${index}-${entity.id}-${i}`}>
             {i < entities.length - 1 && (
               <g>
                 <line
                   x1={x + cardW + 6}
-                  y1={laneY + 22}
+                  y1={laneY + 26}
                   x2={x + span - 8}
-                  y2={laneY + 22}
+                  y2={laneY + 26}
                   stroke="var(--color-primary)"
                   strokeWidth={1.5}
                   strokeDasharray="4 5"
@@ -71,10 +72,21 @@ export function StepStage({
                   />
                 </line>
                 <polygon
-                  points={`${x + span - 8},${laneY + 22} ${x + span - 15},${laneY + 18} ${x + span - 15},${laneY + 26}`}
+                  points={`${x + span - 8},${laneY + 26} ${x + span - 15},${laneY + 22} ${x + span - 15},${laneY + 30}`}
                   fill="var(--color-primary)"
                   opacity={0.8}
                 />
+                {edgeLabel && (
+                  <text
+                    x={(x + cardW + 6 + x + span - 8) / 2}
+                    y={laneY + 16}
+                    textAnchor="middle"
+                    className="fill-muted-foreground"
+                    style={{ fontSize: 10, fontFamily: "var(--font-sans)" }}
+                  >
+                    {edgeLabel.length > 20 ? `${edgeLabel.slice(0, 19)}…` : edgeLabel}
+                  </text>
+                )}
               </g>
             )}
 
@@ -82,7 +94,7 @@ export function StepStage({
               x={x}
               y={laneY}
               width={cardW}
-              height={44}
+              height={56}
               rx={6}
               fill={isLead ? "oklch(0.762 0.128 72 / 0.16)" : "oklch(0.539 0.069 152 / 0.12)"}
               stroke={isLead ? "var(--color-primary)" : "oklch(0.44 0.062 152)"}
@@ -90,13 +102,24 @@ export function StepStage({
             />
             <text
               x={x + cardW / 2}
-              y={laneY + 27}
+              y={entity.value ? laneY + 24 : laneY + 33}
               textAnchor="middle"
               className="fill-foreground"
               style={{ fontSize: 12, fontFamily: "var(--font-sans)" }}
             >
-              {entity.length > 18 ? `${entity.slice(0, 17)}…` : entity}
+              {entity.label.length > 18 ? `${entity.label.slice(0, 17)}…` : entity.label}
             </text>
+            {entity.value && (
+              <text
+                x={x + cardW / 2}
+                y={laneY + 42}
+                textAnchor="middle"
+                className="fill-accent"
+                style={{ fontSize: 12, fontFamily: "var(--font-mono)" }}
+              >
+                {entity.value.length > 20 ? `${entity.value.slice(0, 19)}…` : entity.value}
+              </text>
+            )}
           </g>
         );
       })}
