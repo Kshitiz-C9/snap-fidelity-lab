@@ -8,6 +8,7 @@ export const explainerSchema = z.object({
   steps: z.array(
     z.object({
       label: z.string(),
+      definition: z.string().optional().default(""),
       narration: z.string(),
       visual: z.string(),
       example: z.string().optional().default(""),

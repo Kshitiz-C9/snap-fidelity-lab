@@ -5,12 +5,18 @@ Given source text, produce:
 - a concise explainer title and a 2-sentence summary
 - the academic domain (e.g. Computer Science, Physics, Biology)
 - template_type: exactly one of "state_transition", "grid", "graph_tree", "process_flow"
-- 5 to 8 ordered steps. Each step has a short label, a narration line of 25-45 words spoken aloud, a "visual" line describing what the animation frame shows, an "example" giving one concrete worked instance of that step (max 18 words, with real values/names where possible), and the key entities on screen.
+- 6 to 10 ordered chapters ("steps"). Every chapter MUST teach, not just describe. Each chapter has:
+  - "label": a short chapter title
+  - "definition": a precise 1-2 sentence definition of the term/mechanism the chapter introduces, in textbook wording (include the formula or rule when the source gives one)
+  - "narration": 35-60 words explaining how it works and why it matters
+  - "visual": a concrete diagram description of what should be drawn — name the boxes/nodes, the arrows between them and any values or labels shown (e.g. "three buffer slots, producer arrow into slot 2, empty=3 full=1")
+  - "example": one fully worked instance with real numbers/names, max 25 words, showing the input and the resulting output
+  - "entities": the key on-screen labels used in the diagram
 - 5 to 9 concepts with stable snake_case ids and one-line descriptions
 - relations between those concept ids (use only ids from concepts)
 - 2 to 4 prerequisites the learner should already know, with why
 - 0 to 3 revision flags: claims in the source that look outdated, unsupported, or ambiguous
-- 12 to 15 multiple-choice practice questions with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard. Spread them across the whole document and mix easy, medium and hard.
+- EXACTLY 12 to 15 multiple-choice practice questions (never fewer than 12) with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard. Spread them across the whole document and mix easy, medium and hard.
 Ground everything strictly in the source text. Never invent facts that are not supported by it.
 
 Return ONE json object using EXACTLY these keys and no others:
@@ -19,7 +25,7 @@ Return ONE json object using EXACTLY these keys and no others:
   "summary": string,
   "domain": string,
   "template_type": string,
-  "steps": [{ "label": string, "narration": string, "visual": string, "example": string, "entities": [string] }],
+  "steps": [{ "label": string, "definition": string, "narration": string, "visual": string, "example": string, "entities": [string] }],
   "concepts": [{ "id": string, "label": string, "description": string }],
   "relations": [{ "from": string, "to": string, "label": string }],
   "prerequisites": [{ "topic": string, "why": string }],
