@@ -16,10 +16,11 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
         return (
           <div key={qi} className="panel p-5">
             <div className="flex items-start justify-between gap-3">
-              <h3 className="font-display text-lg">{q.question}</h3>
-              <Badge variant="outline" className="shrink-0 rounded-[3px] text-[11px] font-normal capitalize">
+              <h3 className="font-display text-lg font-bold leading-snug">{q.question}</h3>
+              <span className="shrink-0 rounded-full bg-primary/12 px-2.5 py-1 font-sans text-[11px] font-normal capitalize">
                 {q.difficulty}
-              </Badge>
+              </span>
+
             </div>
             <div className="mt-4 grid gap-2">
               {q.options.map((opt, oi) => {
