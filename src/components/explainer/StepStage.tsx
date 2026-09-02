@@ -15,12 +15,29 @@ export function StepStage({
   const step = steps[index];
   if (!step) return null;
 
-  const entities = step.entities.slice(0, 4);
+  // Prefer the generated diagram (labelled nodes with values + labelled edges),
+  // fall back to plain entity chips when the explainer predates it.
+  const nodes = (step.diagram?.nodes ?? []).slice(0, 5);
+  const edges = step.diagram?.edges ?? [];
+  const entities = nodes.length
+    ? nodes.map((n) => ({ id: n.id, label: n.label, value: n.value ?? "" }))
+    : step.entities.slice(0, 4).map((e) => ({ id: e, label: e, value: "" }));
+
   const W = 720;
-  const H = entities.length ? 118 : 62;
+  const H = entities.length ? 128 : 62;
   const laneY = 8;
   const cardW = entities.length ? Math.min(160, (W - 40) / entities.length - 18) : 0;
   const span = entities.length ? (W - 40 - cardW) / Math.max(entities.length - 1, 1) : 0;
+
+  const labelFor = (i: number) => {
+    if (!nodes.length) return "";
+    const a = entities[i]?.id;
+    const b = entities[i + 1]?.id;
+    const edge = edges.find(
+      (e) => (e.from === a && e.to === b) || (e.from === b && e.to === a),
+    );
+    return edge?.label ?? "";
+  };
 
   const slots = steps.length;
   const slotW = Math.min(46, (W - 40) / slots - 8);
