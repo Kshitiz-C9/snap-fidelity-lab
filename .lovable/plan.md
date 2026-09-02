@@ -25,8 +25,13 @@ Connecting line stays; step numbers remain only as accessible labels.
 ## 4. Tags / pills
 Entity tags ("Producer", "Consumer", "Mutex Semaphore", "Deadlock") lose the hard rectangular outline: borderless pills with a very light paper/amber tint, sans-serif small text.
 
-## 5. Diagram area
-Make the canvas render a real, step-reactive visual instead of only grid paper. For the producer/consumer style flow this means drawing the actual moving parts — buffer slots, producer and consumer nodes, and semaphore/counter values — derived from each step's entities, and updating them as the step advances (active node highlighted amber, completed path sage, upcoming muted). Other template types (states, grid, tree) keep their existing diagrams with the refreshed palette and dot styling.
+## 5. Diagram area — show, don't tell
+Make the canvas render a real, step-reactive visual instead of only grid paper, so the explanation is carried by the diagram and the text becomes a short caption.
+- Draw the actual moving parts for flow topics: buffer slots that fill and empty, producer/consumer nodes, and semaphore/counter values, derived from each step's entities and updating as the step advances (active node amber, completed path sage, upcoming muted).
+- Animate the change between steps: flowing connector, token moving along the path, counters ticking.
+- Other template types (states, grid, tree) get the same treatment in their own idiom — highlighted active state, arrows showing direction of change, values shown on the diagram.
+- The narration text shrinks to a supporting caption beneath the diagram rather than the main content.
+
 
 ## 6. Consistency check
 Apply serif headings, paper surfaces, navy/amber palette, new tags and new dots across every screen still in the app: home, library, upload, auth, chapter player, Knowledge DNA and Practice tabs. Any leftover dark-teal-era styling gets replaced.
