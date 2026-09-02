@@ -5,12 +5,13 @@ Given source text, produce:
 - a concise explainer title and a 2-sentence summary
 - the academic domain (e.g. Computer Science, Physics, Biology)
 - template_type: exactly one of "state_transition", "grid", "graph_tree", "process_flow"
-- 6 to 10 ordered chapters ("steps"). Every chapter MUST teach, not just describe. Each chapter has:
+- 8 to 12 ordered chapters ("steps"). Every chapter MUST teach, not just describe. Each chapter has:
   - "label": a short chapter title
   - "definition": a precise 1-2 sentence definition of the term/mechanism the chapter introduces, in textbook wording (include the formula or rule when the source gives one)
-  - "narration": 35-60 words explaining how it works and why it matters
+  - "narration": 90-140 words that teach the chapter in depth: how the mechanism works step by step, why it matters, the conditions or assumptions it relies on, and a common misconception or failure case
+  - "key_points": 3 to 5 short takeaway bullets (max 15 words each) covering rules, formulas, trade-offs or edge cases from the source
   - "visual": a concrete diagram description of what should be drawn — name the boxes/nodes, the arrows between them and any values or labels shown (e.g. "three buffer slots, producer arrow into slot 2, empty=3 full=1")
-  - "example": one fully worked instance with real numbers/names, max 25 words, showing the input and the resulting output
+  - "example": one fully worked instance with real numbers/names, 25-45 words, showing the input, the intermediate step and the resulting output
   - "diagram": the drawable diagram for this chapter — "nodes" (2 to 5 boxes, each with a snake_case "id", a short "label" and an optional "value" such as a count, state or formula result) and "edges" between those node ids with a short verb "label" (e.g. "writes to", "signals"). The diagram must change meaningfully from chapter to chapter.
   - "entities": the key on-screen labels used in the diagram
 - 5 to 9 concepts with stable snake_case ids and one-line descriptions
@@ -26,7 +27,7 @@ Return ONE json object using EXACTLY these keys and no others:
   "summary": string,
   "domain": string,
   "template_type": string,
-  "steps": [{ "label": string, "definition": string, "narration": string, "visual": string, "example": string, "diagram": { "nodes": [{ "id": string, "label": string, "value": string }], "edges": [{ "from": string, "to": string, "label": string }] }, "entities": [string] }],
+  "steps": [{ "label": string, "definition": string, "narration": string, "visual": string, "example": string, "key_points": [string], "diagram": { "nodes": [{ "id": string, "label": string, "value": string }], "edges": [{ "from": string, "to": string, "label": string }] }, "entities": [string] }],
   "concepts": [{ "id": string, "label": string, "description": string }],
   "relations": [{ "from": string, "to": string, "label": string }],
   "prerequisites": [{ "topic": string, "why": string }],
@@ -38,4 +39,4 @@ Never rename a key (for example use "questions", not "practice_questions"; every
 
 export const NOTES_SYSTEM_PROMPT = `You are a study-notes compressor. You receive one section of a longer document.
 Write dense, faithful notes for that section: key definitions, mechanisms, ordered procedures, formulas, worked examples with real values, and any claims that look outdated or unsupported.
-Keep page markers such as [pages 12-18] where they appear. Use compact bullet points, no preamble, no commentary, max 500 words. Never invent facts.`;
+Keep page markers such as [pages 12-18] where they appear. Use compact bullet points, no preamble, no commentary, max 900 words. Never invent facts.`;
