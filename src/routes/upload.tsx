@@ -23,6 +23,7 @@ import {
   finalizeDocument,
   generateExplainer,
 } from "@/lib/conceptlens.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 /** Manual textarea limit only — uploaded PDFs are not bound by this. */
 const MAX_TEXT_CHARS = 120000;
