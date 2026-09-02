@@ -88,9 +88,16 @@ function UploadPage() {
         );
         return;
       }
-      setContent(text);
+      const clipped = text.length > MAX_CHARS;
+      setContent(clipped ? text.slice(0, MAX_CHARS) : text);
       if (!title) setTitle(file.name.replace(/\.[^.]+$/, ""));
-      if (isPdf) toast.success(`Extracted text from ${file.name}`);
+      if (clipped) {
+        toast.warning(
+          `That file is long — only the first ${MAX_CHARS.toLocaleString()} characters were kept.`,
+        );
+      } else if (isPdf) {
+        toast.success(`Extracted text from ${file.name}`);
+      }
     } catch {
       toast.error("Could not read that file.");
     } finally {
