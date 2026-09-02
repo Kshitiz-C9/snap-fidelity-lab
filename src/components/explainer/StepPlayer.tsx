@@ -64,7 +64,17 @@ export function StepPlayer({
           <h3 className="max-w-3xl text-left font-display text-[2rem] font-bold leading-tight tracking-tight">
             {step.label}
           </h3>
-          <p className="mt-2 max-w-2xl text-left font-sans text-sm font-normal text-accent">
+          {step.definition ? (
+            <div className="mt-3 max-w-2xl border-l-2 border-accent/60 pl-4">
+              <span className="font-sans text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                Definition
+              </span>
+              <p className="mt-1 text-left font-sans text-[0.95rem] leading-relaxed text-foreground">
+                {step.definition}
+              </p>
+            </div>
+          ) : null}
+          <p className="mt-3 max-w-2xl text-left font-sans text-sm font-normal text-accent">
             {step.visual}
           </p>
 
