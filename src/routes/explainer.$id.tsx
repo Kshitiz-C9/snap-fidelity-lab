@@ -5,7 +5,6 @@ import { AppShell } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { StepPlayer } from "@/components/explainer/StepPlayer";
 import { PracticeSet } from "@/components/explainer/PracticeSet";
 import { StepExercises } from "@/components/explainer/StepExercises";
 import type {
@@ -85,8 +84,6 @@ function ExplainerPage() {
         </p>
       </header>
 
-
-      <StepPlayer steps={steps} templateType={String(data.template_type ?? "process_flow")} />
 
       <Tabs defaultValue="knowledge">
         <TabsList>
