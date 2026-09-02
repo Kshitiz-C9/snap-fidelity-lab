@@ -48,7 +48,7 @@ function LibraryPage() {
     <div>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl">Library</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight">Library</h1>
           <p className="mt-2 text-muted-foreground">
             Your generated explainers, concept maps and practice sets.
           </p>
