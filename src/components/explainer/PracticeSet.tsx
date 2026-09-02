@@ -8,8 +8,53 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
   if (!questions.length)
     return <p className="text-sm text-muted-foreground">No questions generated.</p>;
 
+  const answered = Object.keys(picked).length;
+  const correct = questions.reduce(
+    (n, q, i) => n + (picked[i] === q.answer_index ? 1 : 0),
+    0,
+  );
+  const pct = answered ? Math.round((correct / questions.length) * 100) : 0;
+  const band =
+    pct >= 80
+      ? { label: "Excellent", color: "#4E7C59" }
+      : pct >= 60
+        ? { label: "Good", color: "#7C9A4E" }
+        : pct >= 40
+          ? { label: "Needs review", color: "#E8A33D" }
+          : { label: "Weak — revise this chapter", color: "#C2492F" };
+
   return (
     <div className="space-y-4">
+      <div className="border border-border p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h4 className="font-display text-lg font-bold">Your score</h4>
+          <span className="font-sans text-xs text-muted-foreground">
+            {answered} of {questions.length} answered
+          </span>
+        </div>
+        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
+          <div
+            className="h-full transition-all duration-500"
+            style={{ width: `${pct}%`, backgroundColor: band.color }}
+          />
+        </div>
+        <div className="mt-3 flex items-baseline gap-3">
+          <span className="font-display text-3xl font-bold" style={{ color: band.color }}>
+            {correct}/{questions.length}
+          </span>
+          <span className="font-sans text-sm font-medium" style={{ color: band.color }}>
+            {band.label} · {pct}%
+          </span>
+        </div>
+        {answered > 0 && (
+          <button
+            onClick={() => setPicked({})}
+            className="mt-4 rounded-[4px] border border-border px-3 py-1.5 font-sans text-xs hover:border-primary/50"
+          >
+            Reset answers
+          </button>
+        )}
+      </div>
       {questions.map((q, qi) => {
         const choice = picked[qi];
         return (
