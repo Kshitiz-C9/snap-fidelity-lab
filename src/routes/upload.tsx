@@ -11,6 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createDocument, generateExplainer } from "@/lib/conceptlens.functions";
 
+const MAX_CHARS = 120000;
+
 export const Route = createFileRoute("/upload")({
   head: () => ({
     meta: [
@@ -119,7 +121,7 @@ function UploadPage() {
     );
     try {
       const doc = await create({
-        data: { title: title.trim() || "Untitled document", content, sourceType: "text" },
+        data: { title: title.trim() || "Untitled document", content: payload, sourceType: "text" },
       });
       const explainer = await generate({ data: { documentId: doc.id } });
       toast.success("Explainer ready");
