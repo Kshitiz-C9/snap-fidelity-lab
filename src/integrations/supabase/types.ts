@@ -14,24 +14,73 @@ export type Database = {
   }
   public: {
     Tables: {
+      document_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          document_id: string
+          id: string
+          page_end: number | null
+          page_start: number | null
+          user_id: string
+        }
+        Insert: {
+          chunk_index: number
+          content: string
+          created_at?: string
+          document_id: string
+          id?: string
+          page_end?: number | null
+          page_start?: number | null
+          user_id: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          document_id?: string
+          id?: string
+          page_end?: number | null
+          page_start?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documents: {
         Row: {
           char_count: number
           content: string
           created_at: string
           domain: string | null
+          file_name: string | null
+          file_size: number | null
           id: string
+          page_count: number | null
           source_type: string
+          status: string
           title: string
           user_id: string
         }
         Insert: {
           char_count?: number
-          content: string
+          content?: string
           created_at?: string
           domain?: string | null
+          file_name?: string | null
+          file_size?: number | null
           id?: string
+          page_count?: number | null
           source_type?: string
+          status?: string
           title: string
           user_id: string
         }
@@ -40,8 +89,12 @@ export type Database = {
           content?: string
           created_at?: string
           domain?: string | null
+          file_name?: string | null
+          file_size?: number | null
           id?: string
+          page_count?: number | null
           source_type?: string
+          status?: string
           title?: string
           user_id?: string
         }
