@@ -74,12 +74,17 @@ function ExplainerPage() {
   return (
     <div className="space-y-8">
       <header>
-        <Badge variant="secondary" className="rounded-[3px] text-[11px] font-normal capitalize">
+        <span className="rounded-full bg-primary/12 px-2.5 py-1 font-sans text-[11px] font-normal capitalize text-foreground/80">
           {String(data.template_type).replace(/_/g, " ")}
-        </Badge>
-        <h1 className="mt-3 font-display text-4xl">{data.title}</h1>
-        <p className="mt-2 max-w-3xl text-muted-foreground">{data.summary}</p>
+        </span>
+        <h1 className="mt-3 font-display text-[2.75rem] font-bold leading-[1.1] tracking-tight">
+          {data.title}
+        </h1>
+        <p className="mt-2 max-w-3xl font-sans text-sm font-normal leading-relaxed text-muted-foreground">
+          {data.summary}
+        </p>
       </header>
+
 
       <StepPlayer steps={steps} templateType={String(data.template_type ?? "process_flow")} />
 
