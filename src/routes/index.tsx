@@ -49,22 +49,22 @@ const FEATURES = [
 function Index() {
   return (
     <AppShell>
-      <section className="hero-surface -mx-5 -mt-10 px-5 pb-16 pt-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs text-muted-foreground">
+      <section className="-mx-5 -mt-10 px-5 pb-16 pt-20">
+        <div className="max-w-3xl">
+          <span className="inline-flex items-center gap-2 border-l-2 border-primary py-1 pl-3 text-sm text-muted-foreground">
             <Sparkles className="size-3.5 text-primary" />
             Document in, explainer out
           </span>
-          <h1 className="mt-6 text-balance text-5xl font-bold leading-[1.05] sm:text-6xl">
+          <h1 className="mt-6 max-w-2xl text-balance text-5xl leading-[1.08] sm:text-6xl">
             See the concept, not just the{" "}
             <span className="text-primary">paragraph</span>.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-muted-foreground">
+          <p className="mt-5 max-w-xl text-pretty text-lg text-muted-foreground">
             ConceptLens turns dense study material into an animated, narrated
             explainer with a concept map, prerequisites and practice questions.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild size="lg" className="glow">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg">
               <Link to="/upload">
                 Generate an explainer
                 <ArrowRight className="size-4" />
@@ -77,16 +77,13 @@ function Index() {
         </div>
       </section>
 
-      <div className="rule-line h-px w-full" />
+      <div className="h-px w-full bg-border" />
 
       <section className="grid gap-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map((f, i) => (
           <div key={f.title} className="panel p-5">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="font-display text-primary">0{i + 1}</span>
-              <f.icon className="size-4 text-accent" />
-            </div>
-            <h2 className="mt-3 text-lg font-semibold">{f.title}</h2>
+            <f.icon className="size-4 text-primary" />
+            <h2 className="mt-3 font-display text-xl">{f.title}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
           </div>
         ))}

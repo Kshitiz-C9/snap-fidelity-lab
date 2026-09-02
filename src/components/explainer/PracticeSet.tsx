@@ -16,8 +16,8 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
         return (
           <div key={qi} className="panel p-5">
             <div className="flex items-start justify-between gap-3">
-              <h3 className="font-medium">{q.question}</h3>
-              <Badge variant="outline" className="shrink-0 text-[10px] uppercase">
+              <h3 className="font-display text-lg">{q.question}</h3>
+              <Badge variant="outline" className="shrink-0 rounded-[3px] text-[11px] font-normal capitalize">
                 {q.difficulty}
               </Badge>
             </div>
@@ -31,16 +31,16 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
                     key={oi}
                     disabled={answered}
                     onClick={() => setPicked({ ...picked, [qi]: oi })}
-                    className={`flex items-center justify-between rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                    className={`flex items-center justify-between rounded-[4px] border px-3 py-2 text-left text-sm transition-colors ${
                       answered && isCorrect
-                        ? "border-primary bg-primary/10"
+                        ? "border-accent bg-accent/10"
                         : answered && isPicked
                           ? "border-destructive bg-destructive/10"
                           : "border-border hover:border-primary/50"
                     }`}
                   >
                     {opt}
-                    {answered && isCorrect && <Check className="size-4 text-primary" />}
+                    {answered && isCorrect && <Check className="size-4 text-accent" />}
                     {answered && isPicked && !isCorrect && (
                       <X className="size-4 text-destructive" />
                     )}

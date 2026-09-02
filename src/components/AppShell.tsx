@@ -20,7 +20,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-5">
           <Link to="/" className="flex items-center gap-2">
             <Aperture className="size-5 text-primary" />
-            <span className="font-display text-lg font-semibold tracking-tight">
+            <span className="font-display text-lg tracking-tight">
               ConceptLens
             </span>
           </Link>
@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+                className={`rounded-[3px] px-3 py-1.5 text-sm transition-colors ${
                   path === item.to
                     ? "bg-secondary text-foreground"
                     : "text-muted-foreground hover:text-foreground"

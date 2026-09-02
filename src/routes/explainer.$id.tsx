@@ -74,10 +74,10 @@ function ExplainerPage() {
   return (
     <div className="space-y-8">
       <header>
-        <Badge variant="secondary" className="font-mono text-[10px] uppercase">
+        <Badge variant="secondary" className="rounded-[3px] text-[11px] font-normal capitalize">
           {String(data.template_type).replace(/_/g, " ")}
         </Badge>
-        <h1 className="mt-3 text-3xl font-semibold">{data.title}</h1>
+        <h1 className="mt-3 font-display text-4xl">{data.title}</h1>
         <p className="mt-2 max-w-3xl text-muted-foreground">{data.summary}</p>
       </header>
 

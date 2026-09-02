@@ -44,13 +44,14 @@ export function StepPlayer({
   if (!step) return null;
 
   return (
-    <div ref={containerRef} className="panel scroll-mt-24 overflow-hidden">
+    <div ref={containerRef} className="slab scroll-mt-24 overflow-hidden">
+      {/* notebook page: the animation canvas */}
       <div
-        className={`hero-surface relative min-h-[320px] p-8 transition-all duration-300 ease-out ${
-          transitioning ? "scale-[0.99] opacity-70 blur-[1px]" : "scale-100 opacity-100 blur-0"
+        className={`notebook relative min-h-[320px] px-8 py-8 transition-opacity duration-300 ease-out ${
+          transitioning ? "opacity-70" : "opacity-100"
         }`}
       >
-        <div key={`visualdiagram-${index}`} className="animate-in fade-in mb-6">
+        <div className="mb-6">
           <TopicVisual
             templateType={templateType}
             steps={steps}
@@ -61,39 +62,34 @@ export function StepPlayer({
             }}
           />
         </div>
-        <div className="flex flex-wrap gap-2">
+
+        <div className="h-px w-full bg-border" />
+
+        <div className="flex flex-wrap gap-2 pt-6">
           {step.entities.map((entity, i) => (
             <span
               key={`${index}-${entity}-${i}`}
-              className="animate-in fade-in slide-in-from-bottom-2 rounded-lg border border-primary/40 bg-card/80 px-3 py-2 font-mono text-xs text-primary"
-              style={{ animationDelay: `${i * 90}ms`, animationFillMode: "backwards" }}
+              className="rounded-[3px] border border-border px-2.5 py-1 text-xs text-foreground/80"
             >
               {entity}
             </span>
           ))}
         </div>
-        <h3
-          key={`label-${index}`}
-          className="animate-in fade-in slide-in-from-bottom-3 mt-8 text-3xl font-semibold"
-        >
-          {step.label}
-        </h3>
-        <p
-          key={`visual-${index}`}
-          className="animate-in fade-in mt-4 max-w-2xl text-sm text-accent"
-        >
-          {step.visual}
-        </p>
+
+        <h3 className="mt-6 max-w-3xl text-left font-display text-3xl">{step.label}</h3>
+        <p className="mt-3 max-w-2xl text-left text-sm text-accent">{step.visual}</p>
       </div>
 
-      <div className="border-t border-border bg-card px-6 py-5">
-        <p key={`narration-${index}`} className="animate-in fade-in text-base leading-relaxed">
-          {step.narration}
-        </p>
+      <div className="border-t border-border bg-background px-8 py-6">
+        <p className="max-w-3xl text-left text-base leading-relaxed">{step.narration}</p>
+
+        <div className="mt-4 h-px w-full bg-border" />
+
         <div className="mt-5 flex items-center gap-3">
           <Button
             variant="outline"
             size="icon"
+            className="rounded-[3px]"
             onClick={() => goToStep(index - 1)}
             aria-label="Previous step"
           >
@@ -101,6 +97,7 @@ export function StepPlayer({
           </Button>
           <Button
             size="icon"
+            className="rounded-[3px]"
             onClick={() => setPlaying((p) => !p)}
             aria-label={playing ? "Pause" : "Play"}
           >
@@ -109,25 +106,41 @@ export function StepPlayer({
           <Button
             variant="outline"
             size="icon"
+            className="rounded-[3px]"
             onClick={() => goToStep(index + 1)}
             aria-label="Next step"
           >
             <SkipForward className="size-4" />
           </Button>
-          <div className="ml-2 flex flex-1 gap-1">
-            {steps.map((s, i) => (
-              <button
-                key={i}
-                aria-label={`Go to step ${i + 1}: ${s.label}`}
-                onClick={() => goToStep(i)}
-                className={`h-1.5 flex-1 rounded-full transition-colors ${
-                  i <= index ? "bg-primary" : "bg-secondary"
-                }`}
-              />
-            ))}
+
+          {/* connected dots instead of numbered badges */}
+          <div className="relative ml-3 flex flex-1 items-center">
+            <div className="absolute left-0 right-0 h-px bg-border" />
+            <div className="relative flex w-full items-center justify-between">
+              {steps.map((s, i) => (
+                <button
+                  key={i}
+                  aria-label={`Go to step ${i + 1}: ${s.label}`}
+                  aria-current={i === index ? "step" : undefined}
+                  onClick={() => goToStep(i)}
+                  className="group flex size-5 items-center justify-center"
+                >
+                  <span
+                    className={`block rounded-full transition-all ${
+                      i === index
+                        ? "size-3 bg-primary"
+                        : i < index
+                          ? "size-2 bg-primary/70"
+                          : "size-2 border border-muted-foreground/60 bg-background group-hover:border-primary"
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
-          <span className="font-mono text-xs text-muted-foreground">
-            {index + 1}/{steps.length}
+
+          <span className="font-sans text-xs text-muted-foreground">
+            Step {index + 1} of {steps.length}
           </span>
         </div>
       </div>
