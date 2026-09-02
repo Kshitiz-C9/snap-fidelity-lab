@@ -9,6 +9,7 @@ type Props = {
 
 const W = 720;
 const H = 260;
+const FLOW_H = 120;
 
 export function TopicVisual({ templateType, steps, index, onSelect }: Props) {
   if (!steps.length) return null;
@@ -16,7 +17,7 @@ export function TopicVisual({ templateType, steps, index, onSelect }: Props) {
 
   return (
     <svg
-      viewBox={`0 0 ${W} ${H}`}
+      viewBox={`0 0 ${W} ${type === "process_flow" || (type !== "grid" && type !== "graph_tree" && type !== "state_transition") ? FLOW_H : H}`}
       className="w-full"
       role="img"
       aria-label={`Diagram of step ${index + 1}: ${steps[index]?.label ?? ""}`}
@@ -68,8 +69,8 @@ function clip(text: string, max = 16) {
 }
 
 function nodeClasses(state: "done" | "active" | "todo") {
-  if (state === "active") return { fill: "fill-accent", op: 1 };
-  if (state === "done") return { fill: "fill-primary", op: 0.85 };
+  if (state === "active") return { fill: "fill-primary", op: 1 };
+  if (state === "done") return { fill: "fill-primary", op: 0.6 };
   return { fill: "fill-secondary", op: 0.6 };
 }
 
@@ -79,7 +80,7 @@ function stateOf(i: number, index: number) {
 
 function Flow({ steps, index, onSelect }: LayoutProps) {
   const gap = W / steps.length;
-  const y = H / 2;
+  const y = 34;
   return (
     <g>
       {steps.map((s, i) => {
