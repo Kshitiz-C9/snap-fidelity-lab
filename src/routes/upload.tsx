@@ -52,10 +52,49 @@ function UploadPage() {
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState(0);
 
+  async function extractPdf(file: File) {
+    const pdfjs = await import("pdfjs-dist");
+    pdfjs.GlobalWorkerOptions.workerSrc = (
+      await import("pdfjs-dist/build/pdf.worker.min.mjs?url")
+    ).default;
+    const doc = await pdfjs.getDocument({
+      data: await file.arrayBuffer(),
+    }).promise;
+    const pages: string[] = [];
+    for (let i = 1; i <= doc.numPages; i++) {
+      const page = await doc.getPage(i);
+      const content = await page.getTextContent();
+      pages.push(
+        content.items
+          .map((item) => ("str" in item ? item.str : ""))
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      );
+    }
+    return pages.filter(Boolean).join("\n\n");
+  }
+
   async function onFile(file: File) {
-    const text = await file.text();
-    setContent(text);
-    if (!title) setTitle(file.name.replace(/\.[^.]+$/, ""));
+    const isPdf =
+      file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+    setParsing(true);
+    try {
+      const text = isPdf ? await extractPdf(file) : await file.text();
+      if (isPdf && text.trim().length < 200) {
+        toast.error(
+          "Couldn't read enough text from this PDF — it may be a scanned image. Paste the text instead.",
+        );
+        return;
+      }
+      setContent(text);
+      if (!title) setTitle(file.name.replace(/\.[^.]+$/, ""));
+      if (isPdf) toast.success(`Extracted text from ${file.name}`);
+    } catch {
+      toast.error("Could not read that file.");
+    } finally {
+      setParsing(false);
+    }
   }
 
   async function run() {
