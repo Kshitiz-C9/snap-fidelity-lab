@@ -146,11 +146,15 @@ function UploadPage() {
           <div className="flex items-end justify-between">
             <Label htmlFor="content">Source text</Label>
             <label className="cursor-pointer text-xs text-primary hover:underline">
-              <UploadIcon className="mr-1 inline size-3.5" />
-              Upload .txt / .md
+              {parsing ? (
+                <Loader2 className="mr-1 inline size-3.5 animate-spin" />
+              ) : (
+                <UploadIcon className="mr-1 inline size-3.5" />
+              )}
+              {parsing ? "Reading file…" : "Upload .pdf / .txt / .md"}
               <input
                 type="file"
-                accept=".txt,.md,.markdown,text/plain"
+                accept=".pdf,application/pdf,.txt,.md,.markdown,text/plain"
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
