@@ -48,6 +48,18 @@ export function StepPlayer({
           <StepStage steps={steps} index={index} />
         </div>
 
+        {step.example ? (
+          <div className="mt-6 border-l-2 border-primary bg-primary/10 px-4 py-3">
+            <span className="font-sans text-[11px] font-medium uppercase-none text-accent">
+              Example
+            </span>
+            <p className="mt-1 max-w-2xl text-left font-mono text-[0.9rem] leading-relaxed text-foreground">
+              <mark className="bg-primary/25 px-1 text-foreground">{step.example}</mark>
+            </p>
+          </div>
+        ) : null}
+
+
         <div className="mt-7 border-t border-border pt-6">
           <h3 className="max-w-3xl text-left font-display text-[2rem] font-bold leading-tight tracking-tight">
             {step.label}
