@@ -10,7 +10,7 @@ Given source text, produce:
 - relations between those concept ids (use only ids from concepts)
 - 2 to 4 prerequisites the learner should already know, with why
 - 3 to 6 revision flags: the topics a student should revise most before an exam, plus any claim in the source that looks outdated, unsupported or ambiguous. Each flag has "claim" (the topic or statement), "reason" (why it needs revision — commonly confused, exam-critical, outdated, unsupported), "priority" of exactly "high", "medium" or "low" (at least one "high"), and "revise" — one actionable sentence on what to review
-- 4 to 6 multiple-choice practice questions with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard.
+- 10 to 15 multiple-choice practice questions (never fewer than 10) with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard. Spread them across the whole source: cover every major concept and step, mix easy/medium/hard, and avoid near-duplicate questions.
 Ground everything strictly in the source text. Never invent facts that are not supported by it.
 
 Return ONE json object using EXACTLY these keys and no others:
