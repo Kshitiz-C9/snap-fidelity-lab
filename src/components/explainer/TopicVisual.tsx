@@ -90,9 +90,9 @@ function Flow({ steps, index, onSelect }: LayoutProps) {
           <g key={i} opacity={c.op} {...hitProps(onSelect, i, s.label, st === "active")}>
             {i < steps.length - 1 && (
               <line
-                x1={x + 26}
+                x1={x + 18}
                 y1={y}
-                x2={x + gap - 26}
+                x2={x + gap - 18}
                 y2={y}
                 stroke="var(--color-border)"
                 strokeWidth={2}
