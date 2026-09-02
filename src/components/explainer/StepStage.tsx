@@ -17,8 +17,8 @@ export function StepStage({
 
   const entities = step.entities.slice(0, 4);
   const W = 720;
-  const H = entities.length ? 176 : 96;
-  const laneY = 62;
+  const H = entities.length ? 118 : 62;
+  const laneY = 8;
   const cardW = entities.length ? Math.min(160, (W - 40) / entities.length - 18) : 0;
   const span = entities.length ? (W - 40 - cardW) / Math.max(entities.length - 1, 1) : 0;
 
