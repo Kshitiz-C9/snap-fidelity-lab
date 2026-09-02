@@ -2,14 +2,7 @@ import { useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import {
-  CheckCircle2,
-  FileText,
-  Loader2,
-  Upload as UploadIcon,
-  Wand2,
-  X,
-} from "lucide-react";
+import { CheckCircle2, FileText, Loader2, Upload as UploadIcon, Wand2, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
 import { Button } from "@/components/ui/button";
@@ -23,6 +16,7 @@ import {
   finalizeDocument,
   generateExplainer,
 } from "@/lib/conceptlens.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 /** Manual textarea limit only — uploaded PDFs are not bound by this. */
 const MAX_TEXT_CHARS = 120000;
@@ -96,6 +90,18 @@ function UploadPage() {
   const [progress, setProgress] = useState<string>("");
   const [uploaded, setUploaded] = useState<UploadedDoc | null>(null);
   const [failure, setFailure] = useState<string>("");
+
+  /** Long PDF uploads can outlive the access token; refresh and retry once. */
+  async function withAuthRetry<T>(fn: () => Promise<T>): Promise<T> {
+    try {
+      return await fn();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (!/unauthor|invalid token|jwt|expired/i.test(message)) throw error;
+      await supabase.auth.refreshSession();
+      return await fn();
+    }
+  }
 
   async function extractPdfPages(file: File) {
     const pdfjs = await import("pdfjs-dist");
@@ -188,38 +194,44 @@ function UploadPage() {
 
       setPhase("uploading");
       setProgress("Uploading document…");
-      const { id } = await draft({
-        data: {
-          title: docTitle,
-          sourceType: "pdf",
-          fileName: file.name,
-          fileSize: file.size,
-          pageCount: pages.length,
-        },
-      });
+      const { id } = await withAuthRetry(() =>
+        draft({
+          data: {
+            title: docTitle,
+            sourceType: "pdf",
+            fileName: file.name,
+            fileSize: file.size,
+            pageCount: pages.length,
+          },
+        }),
+      );
 
       setPhase("processing");
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i]!;
         setProgress(`Uploading section ${i + 1} of ${chunks.length}…`);
-        await appendChunk({
-          data: {
-            documentId: id,
-            chunkIndex: i,
-            pageStart: chunk.pageStart,
-            pageEnd: chunk.pageEnd,
-            content: chunk.content,
-          },
-        });
+        await withAuthRetry(() =>
+          appendChunk({
+            data: {
+              documentId: id,
+              chunkIndex: i,
+              pageStart: chunk.pageStart,
+              pageEnd: chunk.pageEnd,
+              content: chunk.content,
+            },
+          }),
+        );
       }
 
-      await finalize({
-        data: {
-          documentId: id,
-          charCount,
-          preview: chunks[0]!.content.slice(0, 4000),
-        },
-      });
+      await withAuthRetry(() =>
+        finalize({
+          data: {
+            documentId: id,
+            charCount,
+            preview: chunks[0]!.content.slice(0, 4000),
+          },
+        }),
+      );
 
       setUploaded({
         documentId: id,
@@ -262,10 +274,7 @@ function UploadPage() {
     }
     setBusy(true);
     setStage(0);
-    const ticker = setInterval(
-      () => setStage((s) => Math.min(s + 1, STAGES.length - 1)),
-      4000,
-    );
+    const ticker = setInterval(() => setStage((s) => Math.min(s + 1, STAGES.length - 1)), 4000);
     try {
       const documentId = uploaded
         ? uploaded.documentId
@@ -334,11 +343,7 @@ function UploadPage() {
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInput.current?.click()}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => fileInput.current?.click()}>
                     Replace
                   </Button>
                   <Button variant="ghost" size="sm" onClick={clearFile}>
@@ -364,9 +369,7 @@ function UploadPage() {
             </button>
           )}
 
-          {failure ? (
-            <p className="text-xs text-destructive">{failure}</p>
-          ) : null}
+          {failure ? <p className="text-xs text-destructive">{failure}</p> : null}
 
           <input
             ref={fileInput}
