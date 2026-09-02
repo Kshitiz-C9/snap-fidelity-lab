@@ -10,7 +10,7 @@ Given source text, produce:
 - relations between those concept ids (use only ids from concepts)
 - 2 to 4 prerequisites the learner should already know, with why
 - 0 to 3 revision flags: claims in the source that look outdated, unsupported, or ambiguous
-- 4 to 6 multiple-choice practice questions with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard.
+- 12 to 15 multiple-choice practice questions with exactly 4 options, a 0-based answer_index, an explanation, and difficulty one of easy/medium/hard. Spread them across the whole document and mix easy, medium and hard.
 Ground everything strictly in the source text. Never invent facts that are not supported by it.
 
 Return ONE json object using EXACTLY these keys and no others:
