@@ -19,22 +19,13 @@ export const explainerSchema = z.object({
       id: z.string(),
       label: z.string(),
       description: z.string(),
-      detail: z.string().optional().default(""),
-      example: z.string().optional().default(""),
     }),
   ),
   relations: z.array(
     z.object({ from: z.string(), to: z.string(), label: z.string() }),
   ),
   prerequisites: z.array(z.object({ topic: z.string(), why: z.string() })),
-  revision_flags: z.array(
-    z.object({
-      claim: z.string(),
-      reason: z.string(),
-      priority: z.enum(["high", "medium", "low"]).optional().default("medium"),
-      revise: z.string().optional().default(""),
-    }),
-  ),
+  revision_flags: z.array(z.object({ claim: z.string(), reason: z.string() })),
   questions: z.array(
     z.object({
       question: z.string(),
