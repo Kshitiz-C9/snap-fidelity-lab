@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Loader2, ListChecks } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
@@ -138,6 +138,13 @@ function ExplainerPage() {
             <p className="mt-1 font-sans text-sm text-muted-foreground">
               Multiple-choice questions drawn from the same source.
             </p>
+            <Link
+              to="/quiz/$id"
+              params={{ id }}
+              className="mt-3 inline-block rounded-[3px] bg-primary px-3 py-1.5 font-sans text-xs text-primary-foreground"
+            >
+              Take the chapter quiz
+            </Link>
             <div className="mt-4">
               <PracticeSet questions={questions} />
             </div>
