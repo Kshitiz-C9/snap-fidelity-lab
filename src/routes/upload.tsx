@@ -310,7 +310,7 @@ function UploadPage() {
     <div className="mx-auto max-w-3xl">
       <h1 className="font-display text-3xl font-bold tracking-tight">New explainer</h1>
       <p className="mt-2 text-muted-foreground">
-        Upload a PDF of any length, or paste a chapter, paper or lecture transcript.
+        Upload a PDF , or paste a chapter, paper or lecture transcript.
       </p>
 
       <div className="panel mt-8 space-y-5 p-6">
