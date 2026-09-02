@@ -1,6 +1,11 @@
 # Visual refinement pass
 
-A styling-only pass over the academic theme. No functionality, data, or layout structure changes.
+A styling pass over the academic theme, plus two small changes you asked for: remove the playback control and make each chapter show its idea visually rather than as a block of text.
+
+## 0. Remove the play option
+- Remove the play/pause playback button and the 7-second auto-advance from the chapter player; navigation stays via previous/next and the step dots.
+- Delete the leftover unused voice/narration backend file so nothing audio-related remains.
+
 
 ## 1. Typography hierarchy
 - Chapter/step titles: serif display, bolder and noticeably larger; body/narration stays sans-serif, regular weight, smaller, with softer color.
