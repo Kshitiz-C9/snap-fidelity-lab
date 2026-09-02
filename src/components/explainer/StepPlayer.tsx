@@ -78,6 +78,20 @@ export function StepPlayer({
             {step.visual}
           </p>
 
+          {step.key_points && step.key_points.length > 0 ? (
+            <ul className="mt-4 max-w-2xl space-y-1.5">
+              {step.key_points.map((point, i) => (
+                <li
+                  key={`${index}-kp-${i}`}
+                  className="flex gap-2 text-left font-sans text-[0.9rem] leading-relaxed text-foreground/85"
+                >
+                  <span className="mt-[0.55em] size-1.5 shrink-0 rounded-full bg-accent" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
           <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2">
             {step.entities.map((entity, i) => (
               <span
