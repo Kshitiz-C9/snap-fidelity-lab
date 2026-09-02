@@ -97,7 +97,20 @@ function UploadPage() {
   const [uploaded, setUploaded] = useState<UploadedDoc | null>(null);
   const [failure, setFailure] = useState<string>("");
 
+  /** Long PDF uploads can outlive the access token; refresh and retry once. */
+  async function withAuthRetry<T>(fn: () => Promise<T>): Promise<T> {
+    try {
+      return await fn();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (!/unauthor|invalid token|jwt|expired/i.test(message)) throw error;
+      await supabase.auth.refreshSession();
+      return await fn();
+    }
+  }
+
   async function extractPdfPages(file: File) {
+
     const pdfjs = await import("pdfjs-dist");
     pdfjs.GlobalWorkerOptions.workerSrc = (
       await import("pdfjs-dist/build/pdf.worker.min.mjs?url")
