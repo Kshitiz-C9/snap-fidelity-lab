@@ -85,8 +85,6 @@ function ExplainerPage() {
       </header>
 
 
-      <StepPlayer steps={steps} templateType={String(data.template_type ?? "process_flow")} />
-
       <Tabs defaultValue="knowledge">
         <TabsList>
           <TabsTrigger value="knowledge">Knowledge DNA</TabsTrigger>
