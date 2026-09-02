@@ -69,7 +69,7 @@ export function StepPlayer({
           {step.entities.map((entity, i) => (
             <span
               key={`${index}-${entity}-${i}`}
-              className="rounded-[3px] border border-border px-2.5 py-1 font-mono text-xs text-foreground/80"
+              className="rounded-[3px] border border-border px-2.5 py-1 text-xs text-foreground/80"
             >
               {entity}
             </span>
