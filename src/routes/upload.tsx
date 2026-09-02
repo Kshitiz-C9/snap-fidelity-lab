@@ -50,6 +50,7 @@ function UploadPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [busy, setBusy] = useState(false);
+  const [parsing, setParsing] = useState(false);
   const [stage, setStage] = useState(0);
 
   async function extractPdf(file: File) {
@@ -127,7 +128,7 @@ function UploadPage() {
     <div className="mx-auto max-w-3xl">
       <h1 className="text-3xl font-semibold">New explainer</h1>
       <p className="mt-2 text-muted-foreground">
-        Paste a chapter, paper or lecture transcript. Plain text and markdown
+        Paste a chapter, paper or lecture transcript. PDF, plain text and markdown
         files can be dropped in directly.
       </p>
 
