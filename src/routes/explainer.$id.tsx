@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Loader2, ListChecks } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { StepPlayer } from "@/components/explainer/StepPlayer";
@@ -96,7 +95,7 @@ function ExplainerPage() {
 
         <TabsContent value="knowledge" className="mt-5 grid gap-4 md:grid-cols-2">
           <div className="panel p-5">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <h2 className="flex items-center gap-2 font-display text-xl font-bold">
               <ListChecks className="size-4 text-primary" />
               Prerequisites
             </h2>
@@ -113,7 +112,7 @@ function ExplainerPage() {
             </ul>
           </div>
           <div className="panel p-5">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <h2 className="flex items-center gap-2 font-display text-xl font-bold">
               <AlertTriangle className="size-4 text-accent" />
               Revision flags
             </h2>
