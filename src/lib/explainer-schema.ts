@@ -12,6 +12,7 @@ export const explainerSchema = z.object({
       narration: z.string(),
       visual: z.string(),
       example: z.string().optional().default(""),
+      key_points: z.array(z.string()).optional().default([]),
       diagram: z
         .object({
           nodes: z
