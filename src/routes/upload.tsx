@@ -110,6 +110,7 @@ function UploadPage() {
       toast.error("Add at least 200 characters of source material.");
       return;
     }
+    const payload = content.slice(0, MAX_CHARS);
     setBusy(true);
     setStage(0);
     const ticker = setInterval(
