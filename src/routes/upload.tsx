@@ -2,14 +2,7 @@ import { useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import {
-  CheckCircle2,
-  FileText,
-  Loader2,
-  Upload as UploadIcon,
-  Wand2,
-  X,
-} from "lucide-react";
+import { CheckCircle2, FileText, Loader2, Upload as UploadIcon, Wand2, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RequireAuth } from "@/components/RequireAuth";
 import { Button } from "@/components/ui/button";
@@ -111,7 +104,6 @@ function UploadPage() {
   }
 
   async function extractPdfPages(file: File) {
-
     const pdfjs = await import("pdfjs-dist");
     pdfjs.GlobalWorkerOptions.workerSrc = (
       await import("pdfjs-dist/build/pdf.worker.min.mjs?url")
@@ -205,10 +197,10 @@ function UploadPage() {
       const { id } = await withAuthRetry(() =>
         draft({
           data: {
-          title: docTitle,
-          sourceType: "pdf",
-          fileName: file.name,
-          fileSize: file.size,
+            title: docTitle,
+            sourceType: "pdf",
+            fileName: file.name,
+            fileSize: file.size,
             pageCount: pages.length,
           },
         }),
@@ -282,10 +274,7 @@ function UploadPage() {
     }
     setBusy(true);
     setStage(0);
-    const ticker = setInterval(
-      () => setStage((s) => Math.min(s + 1, STAGES.length - 1)),
-      4000,
-    );
+    const ticker = setInterval(() => setStage((s) => Math.min(s + 1, STAGES.length - 1)), 4000);
     try {
       const documentId = uploaded
         ? uploaded.documentId
@@ -354,11 +343,7 @@ function UploadPage() {
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInput.current?.click()}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => fileInput.current?.click()}>
                     Replace
                   </Button>
                   <Button variant="ghost" size="sm" onClick={clearFile}>
@@ -384,9 +369,7 @@ function UploadPage() {
             </button>
           )}
 
-          {failure ? (
-            <p className="text-xs text-destructive">{failure}</p>
-          ) : null}
+          {failure ? <p className="text-xs text-destructive">{failure}</p> : null}
 
           <input
             ref={fileInput}
