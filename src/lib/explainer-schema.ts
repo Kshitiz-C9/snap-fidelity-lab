@@ -32,6 +32,7 @@ export const explainerSchema = z.object({
       question: z.string(),
       options: z.array(z.string()),
       answer_index: z.number(),
+      step_index: z.number().optional(),
       explanation: z.string(),
       difficulty: z.string(),
     }),

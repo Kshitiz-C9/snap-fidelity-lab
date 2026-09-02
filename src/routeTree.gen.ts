@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as ExplainerIdRouteImport } from './routes/explainer.$id'
+import { Route as QuizIdRouteImport } from './routes/quiz.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const ExplainerIdRoute = ExplainerIdRouteImport.update({
   path: '/explainer/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizIdRoute = QuizIdRouteImport.update({
+  id: '/quiz/$id',
+  path: '/quiz/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/upload': typeof UploadRoute
   '/explainer/$id': typeof ExplainerIdRoute
+  '/quiz/$id': typeof QuizIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/upload': typeof UploadRoute
   '/explainer/$id': typeof ExplainerIdRoute
+  '/quiz/$id': typeof QuizIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,22 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/upload': typeof UploadRoute
   '/explainer/$id': typeof ExplainerIdRoute
+  '/quiz/$id': typeof QuizIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/library' | '/upload' | '/explainer/$id'
+  fullPaths:
+    '/' | '/auth' | '/library' | '/upload' | '/explainer/$id' | '/quiz/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/library' | '/upload' | '/explainer/$id'
-  id: '__root__' | '/' | '/auth' | '/library' | '/upload' | '/explainer/$id'
+  to: '/' | '/auth' | '/library' | '/upload' | '/explainer/$id' | '/quiz/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/library'
+    | '/upload'
+    | '/explainer/$id'
+    | '/quiz/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +94,7 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   UploadRoute: typeof UploadRoute
   ExplainerIdRoute: typeof ExplainerIdRoute
+  QuizIdRoute: typeof QuizIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExplainerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz/$id': {
+      id: '/quiz/$id'
+      path: '/quiz/$id'
+      fullPath: '/quiz/$id'
+      preLoaderRoute: typeof QuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +150,7 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   UploadRoute: UploadRoute,
   ExplainerIdRoute: ExplainerIdRoute,
+  QuizIdRoute: QuizIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
