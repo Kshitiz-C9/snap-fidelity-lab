@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Check, X } from "lucide-react";
 import type { ExplainerQuestion } from "@/lib/explainer-schema";
-import { Badge } from "@/components/ui/badge";
 
 export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
   const [picked, setPicked] = useState<Record<number, number>>({});
@@ -50,7 +49,7 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
               })}
             </div>
             {choice !== undefined && (
-              <p className="mt-3 text-sm text-muted-foreground">{q.explanation}</p>
+              <p className="mt-3 font-sans text-sm text-muted-foreground">{q.explanation}</p>
             )}
           </div>
         );
