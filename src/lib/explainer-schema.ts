@@ -12,6 +12,28 @@ export const explainerSchema = z.object({
       narration: z.string(),
       visual: z.string(),
       example: z.string().optional().default(""),
+      diagram: z
+        .object({
+          nodes: z
+            .array(
+              z.object({
+                id: z.string(),
+                label: z.string(),
+                value: z.string().optional().default(""),
+              }),
+            )
+            .default([]),
+          edges: z
+            .array(
+              z.object({
+                from: z.string(),
+                to: z.string(),
+                label: z.string().optional().default(""),
+              }),
+            )
+            .default([]),
+        })
+        .optional(),
       entities: z.array(z.string()),
     }),
   ),

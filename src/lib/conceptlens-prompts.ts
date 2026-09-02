@@ -11,6 +11,7 @@ Given source text, produce:
   - "narration": 35-60 words explaining how it works and why it matters
   - "visual": a concrete diagram description of what should be drawn — name the boxes/nodes, the arrows between them and any values or labels shown (e.g. "three buffer slots, producer arrow into slot 2, empty=3 full=1")
   - "example": one fully worked instance with real numbers/names, max 25 words, showing the input and the resulting output
+  - "diagram": the drawable diagram for this chapter — "nodes" (2 to 5 boxes, each with a snake_case "id", a short "label" and an optional "value" such as a count, state or formula result) and "edges" between those node ids with a short verb "label" (e.g. "writes to", "signals"). The diagram must change meaningfully from chapter to chapter.
   - "entities": the key on-screen labels used in the diagram
 - 5 to 9 concepts with stable snake_case ids and one-line descriptions
 - relations between those concept ids (use only ids from concepts)
@@ -25,7 +26,7 @@ Return ONE json object using EXACTLY these keys and no others:
   "summary": string,
   "domain": string,
   "template_type": string,
-  "steps": [{ "label": string, "definition": string, "narration": string, "visual": string, "example": string, "entities": [string] }],
+  "steps": [{ "label": string, "definition": string, "narration": string, "visual": string, "example": string, "diagram": { "nodes": [{ "id": string, "label": string, "value": string }], "edges": [{ "from": string, "to": string, "label": string }] }, "entities": [string] }],
   "concepts": [{ "id": string, "label": string, "description": string }],
   "relations": [{ "from": string, "to": string, "label": string }],
   "prerequisites": [{ "topic": string, "why": string }],
