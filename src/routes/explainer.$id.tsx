@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { StepPlayer } from "@/components/explainer/StepPlayer";
 import { PracticeSet } from "@/components/explainer/PracticeSet";
+import { StepExercises } from "@/components/explainer/StepExercises";
 import type {
   ExplainerFlag,
   ExplainerPrereq,
@@ -132,8 +133,17 @@ function ExplainerPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="practice" className="mt-5">
-          <PracticeSet questions={questions} />
+        <TabsContent value="practice" className="mt-5 space-y-8">
+          <StepExercises steps={steps} />
+          <div className="border-t border-border pt-6">
+            <h3 className="font-display text-xl font-bold">Check your understanding</h3>
+            <p className="mt-1 font-sans text-sm text-muted-foreground">
+              Multiple-choice questions drawn from the same source.
+            </p>
+            <div className="mt-4">
+              <PracticeSet questions={questions} />
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
