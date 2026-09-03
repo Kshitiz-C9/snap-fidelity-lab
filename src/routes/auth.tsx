@@ -65,6 +65,21 @@ function AuthPage() {
   }
 
   async function google() {
+    // The Lovable auth broker only works on Lovable-hosted origins. On
+    // localhost/self-hosted builds, use Supabase's native OAuth flow instead.
+    const host = window.location.hostname;
+    const isLovableHost =
+      host.endsWith(".lovable.app") ||
+      host.endsWith(".lovableproject.com") ||
+      host.endsWith(".lovable.dev");
+    if (!isLovableHost) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/auth` },
+      });
+      if (error) toast.error(error.message);
+      return;
+    }
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
