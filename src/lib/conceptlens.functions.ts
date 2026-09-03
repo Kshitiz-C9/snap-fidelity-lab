@@ -247,28 +247,59 @@ export const generateExplainer = createServerFn({ method: "POST" })
       }
     }
 
-    let payload: ExplainerPayload;
+    const userPrompt = `Document title: ${doc.title}\n\n${
+      batches.length === 1
+        ? `Source text:\n${source}`
+        : `The source document was processed in ${batches.length} sections. Structured notes covering the WHOLE document follow — the explainer must represent the complete document, not only its beginning.\n\n${source}`
+    }${extra}`;
+
+    let payload: ExplainerPayload | undefined;
     try {
       const { output } = await generateText({
         model: gateway(MODEL),
         output: Output.object({ schema: explainerSchema }),
         system: SYSTEM_PROMPT,
-        maxOutputTokens: 16000,
-        prompt: `Document title: ${doc.title}\n\n${
-          batches.length === 1
-            ? `Source text:\n${source}`
-            : `The source document was processed in ${batches.length} sections. Structured notes covering the WHOLE document follow — the explainer must represent the complete document, not only its beginning.\n\n${source}`
-        }${extra}`,
+        maxOutputTokens: 32000,
+        prompt: userPrompt,
       });
       payload = output;
     } catch (error) {
-      if (NoObjectGeneratedError.isInstance(error)) {
+      if (
+        !NoObjectGeneratedError.isInstance(error) &&
+        !(error instanceof Error && error.name === "AI_NoOutputGeneratedError")
+      ) {
+        throw error;
+      }
+    }
+
+    if (!payload) {
+      // Fallback: ask for raw JSON and parse it ourselves (handles truncated or
+      // slightly malformed structured-output responses).
+      const { text } = await generateText({
+        model: gateway(MODEL),
+        system: `${SYSTEM_PROMPT}\n\nRespond with ONLY the JSON object, no markdown fences, no commentary.`,
+        maxOutputTokens: 32000,
+        prompt: userPrompt,
+      });
+      const start = text.indexOf("{");
+      const end = text.lastIndexOf("}");
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(text.slice(start, end + 1));
+      } catch {
         throw new Error(
-          "The AI could not structure this document. Try a longer or clearer source text.",
+          "The AI could not structure this document. Try again, or use a shorter or clearer source text.",
         );
       }
-      throw error;
+      const result = explainerSchema.safeParse(parsed);
+      if (!result.success) {
+        throw new Error(
+          "The AI could not structure this document. Try again, or use a shorter or clearer source text.",
+        );
+      }
+      payload = result.data;
     }
+
 
     const { data: row, error } = await context.supabase
       .from("explainers")
