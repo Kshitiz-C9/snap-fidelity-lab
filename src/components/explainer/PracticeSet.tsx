@@ -49,7 +49,7 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
         {answered > 0 && (
           <button
             onClick={() => setPicked({})}
-            className="mt-4 rounded-[4px] border border-border px-3 py-1.5 font-sans text-xs hover:border-primary/50"
+            className="mt-4 rounded-[4px] border border-border px-3 py-1.5 font-sans text-xs hover:border-foreground"
           >
             Reset answers
           </button>
@@ -61,7 +61,7 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
           <div key={qi} className="panel p-5">
             <div className="flex items-start justify-between gap-3">
               <h3 className="font-display text-lg font-bold leading-snug">{q.question}</h3>
-              <span className="shrink-0 rounded-full bg-primary/12 px-2.5 py-1 font-sans text-[11px] font-normal capitalize">
+              <span className="shrink-0 rounded-none border border-border px-2.5 py-1 font-sans text-[11px] font-normal capitalize">
                 {q.difficulty}
               </span>
 
@@ -78,14 +78,14 @@ export function PracticeSet({ questions }: { questions: ExplainerQuestion[] }) {
                     onClick={() => setPicked({ ...picked, [qi]: oi })}
                     className={`flex items-center justify-between rounded-[4px] border px-3 py-2 text-left text-sm transition-colors ${
                       answered && isCorrect
-                        ? "border-accent bg-accent/10"
+                        ? "border-foreground bg-secondary"
                         : answered && isPicked
                           ? "border-destructive bg-destructive/10"
-                          : "border-border hover:border-primary/50"
+                          : "border-border hover:border-foreground"
                     }`}
                   >
                     {opt}
-                    {answered && isCorrect && <Check className="size-4 text-accent" />}
+                    {answered && isCorrect && <Check className="size-4 text-foreground" />}
                     {answered && isPicked && !isCorrect && (
                       <X className="size-4 text-destructive" />
                     )}

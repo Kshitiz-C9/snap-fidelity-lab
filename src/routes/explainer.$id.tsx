@@ -71,15 +71,13 @@ function ExplainerPage() {
   const questions = (data.questions ?? []) as ExplainerQuestion[];
 
   return (
-    <div className="space-y-8">
-      <header>
-        <span className="rounded-full bg-primary/12 px-2.5 py-1 font-sans text-[11px] font-normal capitalize text-foreground/80">
-          {String(data.template_type).replace(/_/g, " ")}
-        </span>
-        <h1 className="mt-3 font-display text-[2.75rem] font-bold leading-[1.1] tracking-tight">
+    <div className="space-y-12">
+      <header className="border-b border-border pb-8">
+        <span className="kicker">{String(data.template_type).replace(/_/g, " ")}</span>
+        <h1 className="mt-3 max-w-4xl font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight sm:text-[3.25rem]">
           {data.title}
         </h1>
-        <p className="mt-2 max-w-3xl font-sans text-sm font-normal leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-[68ch] font-sans text-base leading-relaxed text-muted-foreground">
           {data.summary}
         </p>
       </header>
@@ -88,37 +86,38 @@ function ExplainerPage() {
 
 
       <Tabs defaultValue="knowledge">
-        <TabsList>
-          <TabsTrigger value="knowledge">Knowledge DNA</TabsTrigger>
-          <TabsTrigger value="practice">Practice</TabsTrigger>
+        <TabsList className="h-auto w-full justify-start gap-6 rounded-none border-b border-border bg-transparent p-0">
+          <TabsTrigger value="knowledge" className="rounded-none border-b-2 border-transparent bg-transparent px-0 pb-3 font-sans text-sm text-muted-foreground shadow-none data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none">Knowledge DNA</TabsTrigger>
+          <TabsTrigger value="practice" className="rounded-none border-b-2 border-transparent bg-transparent px-0 pb-3 font-sans text-sm text-muted-foreground shadow-none data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none">Practice</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="knowledge" className="mt-5 grid gap-4 md:grid-cols-2">
-          <div className="panel p-5">
+        <TabsContent value="knowledge" className="mt-8 grid gap-10 md:grid-cols-2">
+          <div>
             <h2 className="flex items-center gap-2 font-display text-xl font-bold">
-              <ListChecks className="size-4 text-primary" />
+              <ListChecks className="size-4 " />
               Prerequisites
             </h2>
-            <ul className="mt-4 space-y-3">
+            <ol className="mt-5 border-l border-foreground">
               {prerequisites.map((p, i) => (
-                <li key={i} className="text-sm">
+                <li key={i} className="relative border-b border-border py-3 pl-5 text-sm last:border-b-0">
+                  <span className="absolute -left-[4.5px] top-[1.15rem] size-2 rounded-full bg-foreground" />
                   <span className="font-medium">{p.topic}</span>
                   <span className="block text-muted-foreground">{p.why}</span>
                 </li>
               ))}
               {!prerequisites.length && (
-                <li className="text-sm text-muted-foreground">None detected.</li>
+                <li className="py-3 pl-5 text-sm text-muted-foreground">None detected.</li>
               )}
-            </ul>
+            </ol>
           </div>
-          <div className="panel p-5">
+          <div>
             <h2 className="flex items-center gap-2 font-display text-xl font-bold">
-              <AlertTriangle className="size-4 text-accent" />
+              <AlertTriangle className="size-4 " />
               Revision flags
             </h2>
             <ul className="mt-4 space-y-3">
               {flags.map((f, i) => (
-                <li key={i} className="text-sm">
+                <li key={i} className="border border-dashed border-foreground/60 px-4 py-3 text-sm">
                   <span className="font-medium">{f.claim}</span>
                   <span className="block text-muted-foreground">{f.reason}</span>
                 </li>
@@ -141,7 +140,7 @@ function ExplainerPage() {
             <Link
               to="/quiz/$id"
               params={{ id }}
-              className="mt-3 inline-block rounded-[3px] bg-primary px-3 py-1.5 font-sans text-xs text-primary-foreground"
+              className="mt-3 inline-block rounded-none bg-primary px-4 py-2 font-sans text-xs text-primary-foreground"
             >
               Take the chapter quiz
             </Link>
