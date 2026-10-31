@@ -30,10 +30,54 @@ export function StepPlayer({
   if (!step) return null;
 
   return (
-    <div ref={containerRef} className="slab scroll-mt-24 overflow-hidden">
-      {/* notebook page: the animation canvas */}
+    <div ref={containerRef} className="scroll-mt-24">
+      {/* timeline */}
+      <nav aria-label="Chapters" className="-mx-1 overflow-x-auto pb-2">
+        <ol className="relative flex min-w-max px-1">
+          {steps.map((s, i) => {
+            const state = i === index ? "active" : i < index ? "done" : "todo";
+            return (
+              <li key={i} className="relative w-36 shrink-0">
+                {i < steps.length - 1 && (
+                  <span
+                    aria-hidden
+                    className={`absolute left-3 right-0 top-[11px] h-px ${i < index ? "bg-foreground" : "bg-border"}`}
+                  />
+                )}
+                <button
+                  onClick={() => goToStep(i)}
+                  aria-current={state === "active" ? "step" : undefined}
+                  aria-label={`Go to step ${i + 1}: ${s.label}`}
+                  className="group relative flex w-full flex-col items-start gap-2 pr-4 text-left"
+                >
+                  <span className="flex size-6 items-center justify-center bg-background">
+                    <span
+                      className={`block rounded-full transition-all ${
+                        state === "active"
+                          ? "size-3.5 bg-foreground ring-4 ring-foreground/10"
+                          : state === "done"
+                            ? "size-2.5 bg-muted-foreground"
+                            : "size-2.5 border border-muted-foreground bg-card group-hover:border-foreground"
+                      }`}
+                    />
+                  </span>
+                  <span
+                    className={`font-sans text-xs leading-snug ${
+                      state === "active" ? "font-semibold text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                    }`}
+                  >
+                    {s.label}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+
+      {/* canvas */}
       <div
-        className={`notebook relative px-8 py-8 transition-opacity duration-300 ease-out ${
+        className={`notebook mt-6 border border-foreground px-5 py-8 transition-opacity duration-300 ease-out sm:px-8 ${
           transitioning ? "opacity-70" : "opacity-100"
         }`}
       >
@@ -43,126 +87,70 @@ export function StepPlayer({
           index={index}
           onSelect={(i) => goToStep(i, true)}
         />
-
         <div className="mt-6 border-t border-border pt-6">
           <StepStage steps={steps} index={index} />
         </div>
+      </div>
 
-        {step.example ? (
-          <div className="mt-6 border-l-2 border-primary bg-primary/10 px-4 py-3">
-            <span className="font-sans text-[11px] font-medium text-accent">
-              Example
-            </span>
-            <p className="mt-1 max-w-2xl text-left font-mono text-[0.9rem] leading-relaxed text-foreground">
-              <mark className="bg-primary/25 px-1 text-foreground">{step.example}</mark>
-            </p>
+      {/* controls */}
+      <div className="flex items-center gap-2 border-x border-b border-border bg-card px-4 py-3">
+        <Button variant="outline" size="icon" className="size-9 rounded-none" onClick={() => goToStep(index - 1)} disabled={index === 0} aria-label="Previous step">
+          <SkipBack className="size-4" />
+        </Button>
+        <Button variant="outline" size="icon" className="size-9 rounded-none" onClick={() => goToStep(index + 1)} disabled={index === steps.length - 1} aria-label="Next step">
+          <SkipForward className="size-4" />
+        </Button>
+        <div className="mx-3 h-px flex-1 bg-border">
+          <div className="h-px bg-foreground transition-all duration-300" style={{ width: `${((index + 1) / steps.length) * 100}%` }} />
+        </div>
+        <span className="font-mono text-xs tabular-nums text-muted-foreground">
+          {String(index + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
+        </span>
+      </div>
+
+      {/* reading column */}
+      <article className={`mx-auto mt-12 max-w-[68ch] transition-opacity duration-300 ${transitioning ? "opacity-70" : "opacity-100"}`}>
+        <span className="kicker">Section {String(index + 1).padStart(2, "0")}</span>
+        <h2 className="mt-2 font-display text-[2.25rem] font-bold leading-[1.1] tracking-tight sm:text-[2.6rem]">
+          {step.label}
+        </h2>
+
+        {step.definition ? (
+          <div className="mt-6 border-l-2 border-foreground pl-5">
+            <span className="kicker">Definition</span>
+            <p className="mt-1.5 font-sans text-[1.02rem] leading-relaxed text-foreground">{step.definition}</p>
           </div>
         ) : null}
 
+        <p className="mt-6 font-sans text-[1.02rem] leading-[1.75] text-foreground/90">{step.narration}</p>
 
-        <div className="mt-7 border-t border-border pt-6">
-          <h3 className="max-w-3xl text-left font-display text-[2rem] font-bold leading-tight tracking-tight">
-            {step.label}
-          </h3>
-          {step.definition ? (
-            <div className="mt-3 max-w-2xl border-l-2 border-accent/60 pl-4">
-              <span className="font-sans text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                Definition
-              </span>
-              <p className="mt-1 text-left font-sans text-[0.95rem] leading-relaxed text-foreground">
-                {step.definition}
-              </p>
-            </div>
-          ) : null}
-          <p className="mt-3 max-w-2xl text-left font-sans text-sm font-normal text-accent">
-            {step.visual}
-          </p>
-
-          {step.key_points && step.key_points.length > 0 ? (
-            <ul className="mt-4 max-w-2xl space-y-1.5">
-              {step.key_points.map((point, i) => (
-                <li
-                  key={`${index}-kp-${i}`}
-                  className="flex gap-2 text-left font-sans text-[0.9rem] leading-relaxed text-foreground/85"
-                >
-                  <span className="mt-[0.55em] size-1.5 shrink-0 rounded-full bg-accent" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-
-          <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2">
-            {step.entities.map((entity, i) => (
-              <span
-                key={`${index}-${entity}-${i}`}
-                className="rounded-full bg-primary/12 px-2.5 py-1 font-sans text-[11px] font-normal text-foreground/80"
-              >
-                {entity}
-              </span>
+        {step.key_points && step.key_points.length > 0 ? (
+          <ul className="mt-6 space-y-2.5 border-t border-border pt-6">
+            {step.key_points.map((point, i) => (
+              <li key={`${index}-kp-${i}`} className="flex gap-3 font-sans text-[0.95rem] leading-relaxed text-foreground/90">
+                <span className="mt-0.5 font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+                <span>{point}</span>
+              </li>
             ))}
+          </ul>
+        ) : null}
+
+        {step.example ? (
+          <div className="mt-8 border border-border bg-secondary px-5 py-4">
+            <span className="kicker">Worked example</span>
+            <p className="mt-2 font-mono text-[0.88rem] leading-relaxed text-foreground">{step.example}</p>
           </div>
-        </div>
-      </div>
+        ) : null}
 
-      <div className="border-t border-border bg-background px-8 py-6">
-        <p className="max-w-3xl text-left font-sans text-[0.95rem] font-normal leading-relaxed text-foreground/85">
-          {step.narration}
-        </p>
+        <p className="mt-6 font-sans text-sm italic text-muted-foreground">{step.visual}</p>
 
-        <div className="mt-5 h-px w-full bg-border" />
-
-        <div className="mt-5 flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-[3px]"
-            onClick={() => goToStep(index - 1)}
-            aria-label="Previous step"
-          >
-            <SkipBack className="size-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-[3px]"
-            onClick={() => goToStep(index + 1)}
-            aria-label="Next step"
-          >
-            <SkipForward className="size-4" />
-          </Button>
-
-          {/* connected dots instead of numbered badges */}
-          <div className="relative ml-3 flex flex-1 items-center">
-            <div className="absolute left-0 right-0 h-px bg-border" />
-            <div className="relative flex w-full items-center justify-between">
-              {steps.map((s, i) => (
-                <button
-                  key={i}
-                  aria-label={`Go to step ${i + 1}: ${s.label}`}
-                  aria-current={i === index ? "step" : undefined}
-                  onClick={() => goToStep(i)}
-                  className="group flex size-6 items-center justify-center bg-background"
-                >
-                  <span
-                    className={`block rounded-full transition-all ${
-                      i === index
-                        ? "size-3 bg-primary ring-4 ring-primary/25"
-                        : i < index
-                          ? "size-2.5 bg-primary"
-                          : "size-2.5 border border-muted-foreground/50 bg-transparent group-hover:border-primary"
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <span className="font-sans text-xs font-normal text-muted-foreground">
-            Step {index + 1} of {steps.length}
-          </span>
-        </div>
-      </div>
+        {step.entities.length > 0 && (
+          <p className="mt-4 font-sans text-xs text-muted-foreground">
+            <span className="font-semibold text-foreground">Key terms: </span>
+            {step.entities.join(" · ")}
+          </p>
+        )}
+      </article>
     </div>
   );
 }

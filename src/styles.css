@@ -62,66 +62,51 @@
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.25rem;
 
-  /* raw palette */
-  --ink: oklch(0.267 0.031 246);          /* #1B2A38 */
-  --ink-deep: oklch(0.222 0.028 246);
-  --paper: oklch(0.968 0.011 92);         /* #F7F5EF */
-  --amber: oklch(0.762 0.128 72);         /* #E8A33D */
-  --sage: oklch(0.539 0.069 152);         /* #4E7C59 */
+  /* raw monochrome palette */
+  --ink: oklch(0.13 0 0);            /* #080808 */
+  --ink-deep: oklch(0.18 0 0);       /* #111111 */
+  --paper: oklch(1 0 0);             /* #FFFFFF */
+  --surface: oklch(0.973 0.002 106); /* #F7F7F5 */
+  --tint: oklch(0.945 0.002 106);    /* #EFEFED */
+  --graphite: oklch(0.44 0 0);       /* #555555 */
+  --hair: oklch(0.88 0 0);           /* #D8D8D8 */
+  --amber: var(--ink-deep);
+  --sage: var(--graphite);
 
-  --background: var(--ink);
-  --foreground: oklch(0.94 0.008 92);
+  --background: var(--surface);
+  --foreground: var(--ink);
   --card: var(--paper);
   --card-foreground: var(--ink);
   --popover: var(--paper);
   --popover-foreground: var(--ink);
-  --primary: var(--amber);
-  --primary-foreground: oklch(0.222 0.028 246);
-  --secondary: oklch(0.33 0.026 246);
-  --secondary-foreground: oklch(0.94 0.008 92);
-  --muted: oklch(0.32 0.024 246);
-  --muted-foreground: oklch(0.76 0.013 92);
-  --accent: var(--sage);
-  --accent-foreground: oklch(0.968 0.011 92);
-  --destructive: oklch(0.55 0.14 28);
-  --destructive-foreground: oklch(0.968 0.011 92);
-  --border: oklch(0.37 0.022 246);
-  --input: oklch(0.37 0.022 246);
-  --ring: var(--amber);
-  --chart-1: var(--amber);
-  --chart-2: var(--sage);
-  --chart-3: oklch(0.6 0.05 246);
-  --chart-4: oklch(0.68 0.09 40);
-  --chart-5: oklch(0.72 0.04 92);
-  --sidebar: var(--ink-deep);
-  --sidebar-foreground: oklch(0.94 0.008 92);
-  --sidebar-primary: var(--amber);
-  --sidebar-primary-foreground: oklch(0.222 0.028 246);
-  --sidebar-accent: oklch(0.33 0.026 246);
-  --sidebar-accent-foreground: oklch(0.94 0.008 92);
-  --sidebar-border: oklch(0.37 0.022 246);
-  --sidebar-ring: var(--amber);
-}
-
-.dark {
-  --background: var(--ink);
-  --foreground: oklch(0.94 0.008 92);
-  --card: var(--paper);
-  --card-foreground: var(--ink);
-  --popover: var(--paper);
-  --popover-foreground: var(--ink);
-  --primary: var(--amber);
-  --primary-foreground: oklch(0.222 0.028 246);
-  --secondary: oklch(0.33 0.026 246);
-  --secondary-foreground: oklch(0.94 0.008 92);
-  --muted: oklch(0.32 0.024 246);
-  --muted-foreground: oklch(0.76 0.013 92);
-  --accent: var(--sage);
-  --accent-foreground: oklch(0.968 0.011 92);
-  --border: oklch(0.37 0.022 246);
-  --input: oklch(0.37 0.022 246);
+  --primary: var(--ink-deep);
+  --primary-foreground: var(--paper);
+  --secondary: var(--tint);
+  --secondary-foreground: var(--ink);
+  --muted: var(--tint);
+  --muted-foreground: var(--graphite);
+  --accent: var(--ink-deep);
+  --accent-foreground: var(--paper);
+  --destructive: oklch(0.5 0.16 27);
+  --destructive-foreground: var(--paper);
+  --border: var(--hair);
+  --input: var(--hair);
+  --ring: var(--ink-deep);
+  --chart-1: var(--ink-deep);
+  --chart-2: var(--graphite);
+  --chart-3: oklch(0.62 0 0);
+  --chart-4: oklch(0.76 0 0);
+  --chart-5: var(--tint);
+  --sidebar: var(--paper);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink-deep);
+  --sidebar-primary-foreground: var(--paper);
+  --sidebar-accent: var(--tint);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--hair);
+  --sidebar-ring: var(--ink-deep);
 }
 
 @layer base {
@@ -152,41 +137,39 @@
   }
 }
 
-/* Paper content card: hairline border, no shadow, softer corners.
-   Re-scopes the semantic tokens so nested text stays legible on paper. */
+/* Content panel: white, hairline border, no shadow. */
 @utility panel {
-  --foreground: var(--ink);
-  --muted-foreground: oklch(0.5 0.015 92);
-  --border: oklch(0.87 0.012 92);
-  --secondary: oklch(0.93 0.012 92);
-  --secondary-foreground: var(--ink);
-  --accent: oklch(0.44 0.062 152);
   background-color: var(--paper);
   color: var(--ink);
-  border: 1px solid oklch(0.87 0.012 92);
-  border-radius: 0.5rem;
-}
-
-/* Structural container (the player): sharper corners, ink surface. */
-@utility slab {
-  background-color: var(--ink-deep);
-  border: 1px solid oklch(0.37 0.022 246);
+  border: 1px solid var(--hair);
   border-radius: 2px;
 }
 
-/* Notebook grid-paper texture for the animation canvas. */
+/* Structural container (the player): sharp corners, white surface. */
+@utility slab {
+  background-color: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 0;
+}
+
+/* Technical grid for the animation canvas. */
 @utility notebook {
-  --foreground: var(--ink);
-  --muted-foreground: oklch(0.5 0.015 92);
-  --secondary: oklch(0.9 0.012 92);
-  --border: oklch(0.85 0.012 92);
-  --accent: oklch(0.44 0.062 152);
   color: var(--ink);
-  background-color: oklch(0.965 0.011 92);
+  background-color: var(--paper);
   background-image:
-    linear-gradient(oklch(0.267 0.031 246 / 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.267 0.031 246 / 0.07) 1px, transparent 1px);
-  background-size: 26px 26px;
+    linear-gradient(oklch(0.13 0 0 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.13 0 0 / 0.045) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Editorial kicker label */
+@utility kicker {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--graphite);
 }
 
 @utility hairline {

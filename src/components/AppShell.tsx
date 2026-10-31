@@ -16,10 +16,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-5">
+      <header className="sticky top-0 z-30 border-b border-border bg-card">
+        <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-5">
           <Link to="/" className="flex items-center gap-2">
-            <Aperture className="size-5 text-primary" />
+            <Aperture className="size-5 " />
             <span className="font-display text-lg tracking-tight">
               ConceptLens
             </span>
@@ -29,9 +29,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`rounded-[3px] px-3 py-1.5 text-sm transition-colors ${
+                className={`px-3 py-1.5 text-sm transition-colors ${
                   path === item.to
-                    ? "bg-secondary text-foreground"
+                    ? "font-medium text-foreground underline underline-offset-[6px]"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >

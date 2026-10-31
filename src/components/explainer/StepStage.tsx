@@ -58,8 +58,8 @@ export function StepStage({
                   y1={laneY + 26}
                   x2={x + span - 8}
                   y2={laneY + 26}
-                  stroke="var(--color-primary)"
-                  strokeWidth={1.5}
+                  stroke="var(--color-muted-foreground)"
+                  strokeWidth={1.25}
                   strokeDasharray="4 5"
                   opacity={0.7}
                 >
@@ -95,10 +95,10 @@ export function StepStage({
               y={laneY}
               width={cardW}
               height={56}
-              rx={6}
-              fill={isLead ? "oklch(0.762 0.128 72 / 0.16)" : "oklch(0.539 0.069 152 / 0.12)"}
-              stroke={isLead ? "var(--color-primary)" : "oklch(0.44 0.062 152)"}
-              strokeWidth={1}
+              rx={0}
+              fill={isLead ? "var(--color-card)" : i % 2 ? "var(--color-secondary)" : "var(--color-card)"}
+              stroke="var(--color-foreground)"
+              strokeWidth={isLead ? 2 : 1}
             />
             <text
               x={x + cardW / 2}
@@ -114,8 +114,8 @@ export function StepStage({
                 x={x + cardW / 2}
                 y={laneY + 42}
                 textAnchor="middle"
-                className="fill-accent"
-                style={{ fontSize: 12, fontFamily: "var(--font-mono)" }}
+                className="fill-foreground"
+                style={{ fontSize: 12, fontWeight: 600, fontFamily: "var(--font-mono)" }}
               >
                 {entity.value.length > 20 ? `${entity.value.slice(0, 19)}…` : entity.value}
               </text>
