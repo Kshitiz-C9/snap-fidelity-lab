@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Use the generated Lovable auth helper for Google sign-in on every origin; native provider redirects require credentials that managed Google authentication does not supply.

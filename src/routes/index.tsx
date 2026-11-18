@@ -13,6 +13,8 @@ export const Route = createFileRoute("/")({
           "Upload a paper, chapter or set of notes and get an animated step-by-step explainer, a concept map, prerequisites and practice questions.",
       },
       { property: "og:title", content: "ConceptLens — visual explainers from documents" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content:

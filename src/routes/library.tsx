@@ -16,6 +16,8 @@ export const Route = createFileRoute("/library")({
         content: "Every visual explainer you have generated from your own documents.",
       },
       { property: "og:title", content: "Explainer library — ConceptLens" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Browse and replay your generated visual explainers.",

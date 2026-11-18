@@ -24,6 +24,8 @@ export const Route = createFileRoute("/explainer/$id")({
           "Animated step-by-step explainer with concept map, prerequisites, practice questions and grounded Q&A.",
       },
       { property: "og:title", content: "Explainer — ConceptLens" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Watch, explore and practise a generated visual explainer.",
