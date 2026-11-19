@@ -1,12 +1,7 @@
 # Exact Replica
 
-Implement exactly the screenshot and nothing else
-
-This project was built with [Lovable](https://lovable.dev).
-
 **Live app**: https://snap-fidelity-lab.lovable.app
 
-## Build with Lovable
 
 Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e1da562d-4e79-4ad2-aec2-663a0939ab53).
 
