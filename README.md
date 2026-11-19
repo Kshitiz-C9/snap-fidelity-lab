@@ -1,4 +1,4 @@
-# Exact Replica
+# Concept Lens
 
 **Live app**: https://snap-fidelity-lab.lovable.app
 
